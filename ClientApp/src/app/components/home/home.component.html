@@ -1,0 +1,17 @@
+<p>Welcome to most efficient task management app : Checklist</p>
+<p>To help you get started, we've also set up random checklists which you can play around with:</p>
+<div class="row">
+  <div class="col-sm-3 card" style="width: 18rem;" *ngFor="let note of notes">
+    <div class="card-body">
+      <h5 class="card-title">{{note.title}}</h5>
+      <p class="card-text" *ngIf="true">{{note.text}}
+      </p>
+      <span *ngIf="true">
+        <label *ngFor="let item of note.items">
+          <input type="checkbox" [checked]="item.checked">{{item.text}}
+        </label>
+      </span>
+    </div>
+  </div>
+</div>
+<button class="big-add show-add-note">+</button>
