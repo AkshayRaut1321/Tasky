@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "checklist": {
+    "Tasky": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -52,18 +52,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "checklist:build"
+            "browserTarget": "Tasky:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "checklist:build:production"
+              "browserTarget": "Tasky:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "checklist:build"
+            "browserTarget": "Tasky:build"
           }
         },
         "test": {
@@ -122,7 +122,7 @@
         }
       }
     },
-    "checklist-e2e": {
+    "Tasky-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -130,7 +130,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "checklist:serve"
+            "devServerTarget": "Tasky:serve"
           }
         },
         "lint": {
@@ -145,5 +145,5 @@
       }
     }
   },
-  "defaultProject": "checklist"
+  "defaultProject": "Tasky"
 }
