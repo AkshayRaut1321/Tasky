@@ -36,6 +36,7 @@
 }
 
 /* really not sure where to put this. Kinda requires more body padding, but then that gets tricky at mobile resolutions where the padding just takes up too much screen space*/
+
 .big-add {
     background-color: #F44336;
     color: #fff;
@@ -48,9 +49,20 @@
     box-shadow: none;
     width: 56px;
     height: 56px;
-    padding: 16px;
+    padding: 8px;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
     cursor: pointer;
     font-size: 40px;
     line-height: 24px;
-  }
+}
+
+.card-body {
+    padding: 0.50rem;
+}
+
+@media (min-width: 576px) {
+    .col-sm-3 {
+        flex: 0 0 23%;
+        max-width: 23%;
+    }
+}

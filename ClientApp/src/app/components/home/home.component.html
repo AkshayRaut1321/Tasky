@@ -1,14 +1,15 @@
-<p>Welcome to most efficient task management app : Checklist</p>
+<p>Welcome to most efficient task management app : Tasky</p>
 <p>To help you get started, we've also set up random checklists which you can play around with:</p>
 <div class="editNote">
-  <input type="text" value="New note">
-  <button class="big-add show-add-note">+</button>
-  <button class="big-add show-add-note">+</button>
-  <button class="big-add show-add-note">+</button>
-  <i class="fab fa-angular"></i>
+  <div class="">
+    <input type="text" class="col-sm-5" placeholder="Title" #title>
+    <br>
+    <input type="text" class="col-sm-5" placeholder="Description" #text
+      (keyup.enter)="saveNote(title.value, text.value)">
+  </div>
 </div>
-<div class="row">
-  <div class="col-sm-3 card" style="width: 18rem;" *ngFor="let note of notes">
+<div class="row" style="display: flex;">
+  <div class="col-sm-3 card" style="height: max-content;" *ngFor="let note of notes">
     <div class="card-body">
       <h5 class="card-title">{{note.title}}</h5>
       <p class="card-text" *ngIf="true">{{note.text}}
@@ -21,4 +22,6 @@
     </div>
   </div>
 </div>
-<button class="big-add show-add-note">+</button>
+<!-- <button class="big-add">
+    <i class="fas fa-plus-circle white"></i>
+</button> -->

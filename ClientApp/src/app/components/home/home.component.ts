@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
     let textNote = new Note();
     textNote.id = 1;
     textNote.title = 'Diary';
-    textNote.text = 'This is my second application and I am trying to make an useful checklist';
+    textNote.text = 'This is my second application and I am trying to make an useful checklist. Try adding one of your own.';
 
     this.notes.push(textNote);
 
@@ -41,5 +41,16 @@ export class HomeComponent implements OnInit {
     checkList.items.push(checkItem2);
 
     this.notes.push(checkList);
+
+    this.notes.push(textNote);
+    this.notes.push(checkList);
+  }
+
+  saveNote(title : string, text : string) {
+    let newNote = new Note();
+    newNote.text = text;
+    newNote.id = 3;
+    newNote.title = title;
+    this.notes.push(newNote);
   }
 }
