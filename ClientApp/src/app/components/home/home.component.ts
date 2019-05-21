@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Note } from '../../models/Note';
 import { BaseNote } from '../../models/BaseNote';
 import { CheckList } from '../../models/CheckList';
 import { ListItem } from '../../models/ListItem';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-home',
@@ -11,6 +12,11 @@ import { ListItem } from '../../models/ListItem';
 })
 export class HomeComponent implements OnInit {
   notes: BaseNote[];
+  editMode = false;
+
+  constructor(private renderer: Renderer2) {
+
+  }
 
   ngOnInit(): void {
     this.notes = new Array();
@@ -46,11 +52,39 @@ export class HomeComponent implements OnInit {
     this.notes.push(checkList);
   }
 
-  saveNote(title : string, text : string) {
-    let newNote = new Note();
-    newNote.text = text;
-    newNote.id = 3;
-    newNote.title = title;
-    this.notes.push(newNote);
+  saveNote(title: string, text: string) {
+    if (!isNullOrUndefined(text) && !(text == "")) {
+      let newNote = new Note();
+      newNote.text = text;
+      newNote.id = 3;
+      newNote.title = title;
+      this.notes.push(newNote);
+    }
+  }
+
+  openEditor() {
+    this.editMode = true;
+    const element = this.renderer.selectRootElement('#newText');
+    setTimeout(() => element.focus, 0);
+  }
+
+  closeEditor(title: HTMLInputElement, text: HTMLTextAreaElement) {
+    this.editMode = false;
+    let nonWhiteSpaceContent = text.value.replace(/(?:\r\n|\r|\n)/g, '');
+    if (nonWhiteSpaceContent !== "" && !isNullOrUndefined(nonWhiteSpaceContent)) {
+      this.saveNote(title.value, text.value);
+    }
+    text.value = "";
+    text.rows = 1;
+    title.value = "";
+  }
+
+  textTyped(event: KeyboardEvent, text: HTMLTextAreaElement) {
+    if (event.keyCode !== 13 && (event.keyCode <= 48 || event.keyCode >= 90) && (event.keyCode <= 97 && event.keyCode >= 122)) {
+      console.log(event);
+      return false;
+    }
+    if (event.keyCode === 13)
+      text.rows++;
   }
 }
