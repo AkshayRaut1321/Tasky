@@ -1,19 +1,20 @@
 <p>Welcome to most efficient task management app : Tasky</p>
 <p>To help you get started, we've also set up random checklists which you can play around with:</p>
-<div class="editNote" tabindex="-1" (click)="openEditor();" (focusout)="closeEditor(title, text);">
-  <div>
-    <input id="newTitle" type="text" class="col-sm-5" placeholder="Title" #title [hidden]="!editMode">
+<div #divNewNote class="editNote" tabindex="-1" (click)="openEditor();" (focusout)="closeEditor($event, title, text);">
+  <div [hidden]="!editMode">
+    <input id="newTitle" type="text" class="col-sm-5" placeholder="Title" #title>
   </div>
   <!-- <input id="newText" type="text" class="col-sm-5" placeholder="Take a note..." #text [ngClass]="{ textOnFocus: editMode }"
     (keypress)="textTyped($event)"> -->
   <textarea id="newText" type="text" class="col-sm-5" placeholder="Take a note..." #text
-    (keypress)="textTyped($event, text)" rows="1"></textarea>
+    (keydown)="textTyped($event, text)" rows="1"></textarea>
 </div>
+<br>
 <div class="row">
   <div class="col-sm-3 card" style="height: max-content;" *ngFor="let note of notes">
     <div class="card-body">
       <h5 class="card-title">{{note.title}}</h5>
-      <p class="card-text" *ngIf="true">{{note.text}}
+      <p class="card-text" *ngIf="hasText(note)">{{note.text}}
       </p>
       <span *ngIf="true">
         <label *ngFor="let item of note.items">

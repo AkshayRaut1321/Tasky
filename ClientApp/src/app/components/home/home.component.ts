@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { Note } from '../../models/Note';
 import { BaseNote } from '../../models/BaseNote';
 import { CheckList } from '../../models/CheckList';
@@ -13,6 +13,11 @@ import { isNullOrUndefined } from 'util';
 export class HomeComponent implements OnInit {
   notes: BaseNote[];
   editMode = false;
+
+  @ViewChild('title') newTitle: ElementRef;
+  @ViewChild('divNewNote') divNewNote: ElementRef;
+  @ViewChild('text') newText: ElementRef;
+
 
   constructor(private renderer: Renderer2) {
 
@@ -53,7 +58,7 @@ export class HomeComponent implements OnInit {
   }
 
   saveNote(title: string, text: string) {
-    if (!isNullOrUndefined(text) && !(text == "")) {
+    if (!isNullOrUndefined(text) && text != "") {
       let newNote = new Note();
       newNote.text = text;
       newNote.id = 3;
@@ -68,7 +73,11 @@ export class HomeComponent implements OnInit {
     setTimeout(() => element.focus, 0);
   }
 
-  closeEditor(title: HTMLInputElement, text: HTMLTextAreaElement) {
+  closeEditor(event: FocusEvent, title: HTMLInputElement, text: HTMLTextAreaElement) {
+    let divEl = (this.divNewNote.nativeElement as HTMLElement);
+    if (divEl.contains(event.relatedTarget as HTMLElement))
+      return false;
+
     this.editMode = false;
     let nonWhiteSpaceContent = text.value.replace(/(?:\r\n|\r|\n)/g, '');
     if (nonWhiteSpaceContent !== "" && !isNullOrUndefined(nonWhiteSpaceContent)) {
@@ -86,5 +95,16 @@ export class HomeComponent implements OnInit {
     }
     if (event.keyCode === 13)
       text.rows++;
+    else if (event.keyCode === 8) {
+      let matchedLineBreak = RegExp(/\r\n|\r|\n/).exec(text.value[text.value.length - 1]);
+      if (!isNullOrUndefined(matchedLineBreak)) {
+        let totalNewLines = text.value.split(/\r\n|\r|\n/).length;
+        text.rows = totalNewLines > 1 ? totalNewLines - 1 : 1;
+      }
+    }
+  }
+
+  hasText(note: Note) {
+    return (note.text != "" && !isNullOrUndefined(note.text));
   }
 }
