@@ -13,18 +13,20 @@ import { isNullOrUndefined } from 'util';
 export class HomeComponent implements OnInit {
   notes: BaseNote[];
   editMode = false;
+  newChecklist: CheckList;
 
   @ViewChild('title') newTitle: ElementRef;
   @ViewChild('divNewNote') divNewNote: ElementRef;
   @ViewChild('text') newText: ElementRef;
-
+  @ViewChild('divNewChecklist') divNewChecklist: ElementRef;
 
   constructor(private renderer: Renderer2) {
 
   }
 
   ngOnInit(): void {
-    this.notes = new Array();
+    this.notes = [];
+    this.resetChecklist();
 
     let textNote = new Note();
     textNote.id = 1;
@@ -38,10 +40,10 @@ export class HomeComponent implements OnInit {
     checkItem1.text = 'Build Tasky app';
     checkItem1.checked = true;
 
-    let checkItem2 = new ListItem();
-    checkItem2.id = 2;
-    checkItem2.text = 'Deploy Task app';
-    checkItem2.checked = false;
+    let newChecklistItem = new ListItem();
+    newChecklistItem.id = 2;
+    newChecklistItem.text = 'Deploy Task app';
+    newChecklistItem.checked = false;
 
     let checkList = new CheckList();
     checkList.id = 2;
@@ -49,12 +51,28 @@ export class HomeComponent implements OnInit {
     checkList.items = new Array();
 
     checkList.items.push(checkItem1);
-    checkList.items.push(checkItem2);
+    checkList.items.push(newChecklistItem);
 
     this.notes.push(checkList);
 
     this.notes.push(textNote);
     this.notes.push(checkList);
+  }
+
+  resetChecklist() {
+    this.newChecklist = new CheckList();
+    this.newChecklist.items = [];
+  }
+
+  hasText(text: string) {
+    if (isNullOrUndefined(text))
+      return false;
+    let nonWhiteSpaceContent = text.replace(/(?:\r\n|\r|\n)/g, '');
+    return (nonWhiteSpaceContent != "" && !isNullOrUndefined(nonWhiteSpaceContent));
+  }
+
+  getText() {
+
   }
 
   saveNote(title: string, text: string) {
@@ -78,14 +96,13 @@ export class HomeComponent implements OnInit {
     if (divEl.contains(event.relatedTarget as HTMLElement))
       return false;
 
-    this.editMode = false;
-    let nonWhiteSpaceContent = text.value.replace(/(?:\r\n|\r|\n)/g, '');
-    if (nonWhiteSpaceContent !== "" && !isNullOrUndefined(nonWhiteSpaceContent)) {
+    if (this.hasText(text.value)) {
       this.saveNote(title.value, text.value);
     }
     text.value = "";
     text.rows = 1;
     title.value = "";
+    this.editMode = false;
   }
 
   textTyped(event: KeyboardEvent, text: HTMLTextAreaElement) {
@@ -104,7 +121,55 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  hasText(note: Note) {
-    return (note.text != "" && !isNullOrUndefined(note.text));
+  saveChecklist(title: string) {
+    let checklist = Object.assign({}, this.newChecklist);
+    checklist.title = title;
+    this.notes.push(checklist);
+  }
+
+  hasChecklistItems() {
+    return this.newChecklist.items.length > 0;
+  }
+
+  openChecklist() {
+    this.editMode = true;
+  }
+
+  checkListTyped(event: KeyboardEvent, text: HTMLInputElement) {
+    if (event.keyCode !== 13 && (event.keyCode <= 48 || event.keyCode >= 90) && (event.keyCode <= 97 && event.keyCode >= 122)) {
+      console.log(event);
+      return false;
+    }
+    if (event.keyCode === 13) {
+      if (this.hasText(text.value)) {
+        this.saveChecklistItem(text.value);
+        text.value = '';
+      }
+    }
+  }
+
+  saveChecklistItem(checkBoxText: string) {
+    let newChecklistItem = new ListItem();
+    newChecklistItem.id = 2;
+    newChecklistItem.text = checkBoxText;
+    newChecklistItem.checked = false;
+    this.newChecklist.items.push(newChecklistItem);
+  }
+
+  closeChecklist(event: FocusEvent, title: HTMLInputElement, checklistText: HTMLInputElement) {
+    let divEl = (this.divNewChecklist.nativeElement as HTMLElement);
+    if (divEl.contains(event.relatedTarget as HTMLElement))
+      return false;
+
+    //save complete checklist
+    if (this.hasText(checklistText.value))
+      this.saveChecklistItem(checklistText.value);
+    if (this.hasChecklistItems()) {
+      this.saveChecklist(title.value);
+    }
+    this.resetChecklist();
+    checklistText.value = "";
+    title.value = "";
+    this.editMode = false;
   }
 }
