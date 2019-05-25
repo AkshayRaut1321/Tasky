@@ -16,11 +16,14 @@ Tasks
 1.	Prepare a JSON structure – DONE
 2.	Add a layout to show Notes - DONE
 3.	Option to add new Notes – DONE
-4.	Option to convert Note to Checklist and back 
-5.	Add schedule for notes
-6.	Search feature
-7.	Delete feature
-8.	History of notes
-9.	Login and logout
-10.	Log history of checklist in JSON files.
-11.	Maximum a yearly data of checklist
+4.	Option to add checklist - DONE
+5.	Option to convert Note to Checklist and back 
+6.	Add schedule for notes
+7.	Search feature
+8.	Delete feature
+9.	History of notes
+10.	Login and logout
+11.	Log history of checklist in JSON files.
+12.	Maximum a yearly data of checklist
+13.	Disable text copy and paste from saved notes unless user clicks on them.
+14.	Selection of notes
