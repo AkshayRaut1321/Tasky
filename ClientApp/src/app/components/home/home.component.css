@@ -97,7 +97,7 @@
     left: 0px;
 }
 
-.newChecklistItem {
+.newChecklistItem, #newChecklistText, #newChecklistTitle {
     border: none;
     outline: 0px !important;
 }
