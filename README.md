@@ -17,13 +17,15 @@ Tasks
 2.	Add a layout to show Notes - DONE
 3.	Option to add new Notes – DONE
 4.	Option to add checklist - DONE
-5.	Option to convert Note to Checklist and back 
-6.	Add schedule for notes
-7.	Search feature
-8.	Delete feature
-9.	History of notes
-10.	Login and logout
-11.	Log history of checklist in JSON files.
-12.	Maximum a yearly data of checklist
-13.	Disable text copy and paste from saved notes unless user clicks on them.
-14.	Selection of notes
+5.	Option to convert Note to Checklist and back
+6.	User should be able to add checkbox between items - DONE
+7.	If a new checkbox item is added in middle then set focus on that - DONE
+8.	Add schedule for notes
+9.	Search feature
+10.	Delete feature
+11.	History of notes
+12.	Login and logout
+13.	Log history of checklist in JSON files.
+14.	Maximum a yearly data of checklist
+15.	Disable text copy and paste from saved notes unless user clicks on them.
+16.	Selection of notes
