@@ -13,14 +13,23 @@
     <input id="newChecklistTitle" type="text" class="col-sm-5" placeholder="Title" #checklistTitle>
   </div>
   <span *ngIf="hasChecklistItems()">
-    <label *ngFor="let item of newChecklist.items" class="col-sm-12">
-      <input type="checkbox" [checked]="item.checked">{{item.text}}
-    </label>
+    <div *ngFor="let item of newChecklist.items" class="col-sm-12">
+      <!-- <label>
+        <input type="checkbox" [(ngModel)]="item.checked">
+      </label> -->
+      <span class="checkbox">
+        <input type="checkbox" [id]="newChecklistBoxIdKey + item.id" [(ngModel)]="item.checked">
+        <label [attr.for]="newChecklistBoxIdKey + item.id"></label>
+      </span>
+      <input [id]="newChecklistItemIdKey + item.id" type="text" placeholder="Take a note..." [(ngModel)]="item.text"
+        class="newChecklistItem" #checklistItemElement
+        (keypress)="editExistingChecklist($event, item, checklistItemElement)">
+    </div>
   </span>
   <div>
     <i class="fas fa-plus red"></i>
     <input id="newChecklistText" type="text" placeholder="Take a note..." #checklistText
-      [ngClass]="{ textOnFocus: editMode }" (keypress)="checkListTyped($event, checklistText)">
+      (keypress)="checkListTyped($event, checklistText)">
   </div>
 </div>
 <br>
@@ -32,7 +41,11 @@
       </p>
       <span *ngIf="true">
         <label *ngFor="let item of note.items" class="col-sm-12">
-          <input type="checkbox" [checked]="item.checked">{{item.text}}
+          <!-- <input type="checkbox" [checked]="item.checked">{{item.text}} -->
+          <span class="checkbox">
+            <input type="checkbox" [id]="newChecklistBoxIdKey + item.id" [(ngModel)]="item.checked">
+            <label [attr.for]="newChecklistBoxIdKey + item.id">{{item.text}}</label>
+          </span>
         </label>
       </span>
     </div>

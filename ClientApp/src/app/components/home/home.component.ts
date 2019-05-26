@@ -14,6 +14,8 @@ export class HomeComponent implements OnInit {
   notes: BaseNote[];
   editMode = false;
   newChecklist: CheckList;
+  newChecklistItemIdKey = 'newChecklistText';
+  newChecklistBoxIdKey = 'newChecklistBox';
 
   @ViewChild('title') newTitle: ElementRef;
   @ViewChild('divNewNote') divNewNote: ElementRef;
@@ -79,10 +81,14 @@ export class HomeComponent implements OnInit {
     if (!isNullOrUndefined(text) && text != "") {
       let newNote = new Note();
       newNote.text = text;
-      newNote.id = 3;
+      newNote.id = this.getMaxNoteId() + 1;
       newNote.title = title;
       this.notes.push(newNote);
     }
+  }
+
+  getMaxNoteId(): number {
+    return this.notes.length == 0 ? 0 : Math.max.apply(Math, this.notes.map(function (o) { return o.id; }));
   }
 
   openEditor() {
@@ -148,12 +154,39 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  editExistingChecklist(event: KeyboardEvent, checklistItem: ListItem, checklistItemElement: HTMLInputElement) {
+    if (event.keyCode !== 13 && (event.keyCode <= 48 || event.keyCode >= 90) && (event.keyCode <= 97 && event.keyCode >= 122)) {
+      console.log(event);
+      return false;
+    }
+    if (event.keyCode === 13 && !isNullOrUndefined(checklistItem)) {
+      let existingChecklistItemIndex = this.newChecklist.items.indexOf(checklistItem);
+      let newChecklistItem = new ListItem();
+      newChecklistItem.id = Infinity;
+      newChecklistItem.text = '';
+      newChecklistItem.checked = false;
+      this.newChecklist.items.splice(existingChecklistItemIndex + 1, 0, newChecklistItem);
+      console.log(this.newChecklistItemIdKey + newChecklistItem.id);
+      setTimeout(() => this.focusEl(), 1);
+    }
+  }
+
+  focusEl() {
+    const element = this.renderer.selectRootElement('#' + this.newChecklistItemIdKey + 999) as HTMLElement;
+    console.log(element);
+    element.focus();
+  }
+
   saveChecklistItem(checkBoxText: string) {
     let newChecklistItem = new ListItem();
-    newChecklistItem.id = 2;
+    newChecklistItem.id = this.getMaxChecklistItemId(this.newChecklist) + 1;
     newChecklistItem.text = checkBoxText;
     newChecklistItem.checked = false;
     this.newChecklist.items.push(newChecklistItem);
+  }
+
+  getMaxChecklistItemId(checklist: CheckList): number {
+    return checklist.items.length == 0 ? 0 : Math.max.apply(Math, checklist.items.map(function (o) { return o.id; }));
   }
 
   closeChecklist(event: FocusEvent, title: HTMLInputElement, checklistText: HTMLInputElement) {
