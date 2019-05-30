@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
   @ViewChild('divNewNote') divNewNote: ElementRef;
   @ViewChild('text') newText: ElementRef;
   @ViewChild('divNewChecklist') divNewChecklist: ElementRef;
-  @ViewChildren('checkBoxes') checkBoxes: QueryList<ElementRef>;
+  @ViewChildren('checkBoxes') checkBoxes: QueryList<ElementRef<HTMLElement>>;
 
   constructor(private renderer: Renderer2) {
 
@@ -170,7 +170,7 @@ export class HomeComponent implements OnInit {
       setTimeout(() => {
         var data = this.checkBoxes.toArray();
         var currentElementIndex = data.findIndex((a: ElementRef<HTMLElement>) => a.nativeElement.lastChild == checklistItemElement);
-        var nextElement = data[currentElementIndex + 1].nativeElement.lastChild;
+        var nextElement = data[currentElementIndex + 1].nativeElement.lastChild as HTMLElement;
         // const element = this.renderer.selectRootElement('#' + this.newChecklistItemIdKey + newChecklistItem.id) as HTMLElement;
         nextElement.focus();
       }, 1);
