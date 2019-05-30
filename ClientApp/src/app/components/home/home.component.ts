@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { Note } from '../../models/Note';
 import { BaseNote } from '../../models/BaseNote';
 import { CheckList } from '../../models/CheckList';
@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit {
   @ViewChild('divNewNote') divNewNote: ElementRef;
   @ViewChild('text') newText: ElementRef;
   @ViewChild('divNewChecklist') divNewChecklist: ElementRef;
+  @ViewChildren('checkBoxes') checkBoxes: QueryList<ElementRef>;
 
   constructor(private renderer: Renderer2) {
 
@@ -166,16 +167,18 @@ export class HomeComponent implements OnInit {
       newChecklistItem.text = '';
       newChecklistItem.checked = false;
       this.newChecklist.items.splice(existingChecklistItemIndex + 1, 0, newChecklistItem);
-      console.log(this.newChecklistItemIdKey + newChecklistItem.id);
-      setTimeout(() => this.focusEl(), 1);
+      setTimeout(() => {
+        var data = this.checkBoxes.toArray();
+        var currentElementIndex = data.findIndex((a: ElementRef<HTMLElement>) => a.nativeElement.lastChild == checklistItemElement);
+        var nextElement = data[currentElementIndex + 1].nativeElement.lastChild;
+        // const element = this.renderer.selectRootElement('#' + this.newChecklistItemIdKey + newChecklistItem.id) as HTMLElement;
+        nextElement.focus();
+      }, 1);
     }
   }
 
-  focusEl() {
-    const element = this.renderer.selectRootElement('#' + this.newChecklistItemIdKey + 999) as HTMLElement;
-    console.log(element);
-    element.focus();
-  }
+  // focusEl() {
+  // }
 
   saveChecklistItem(checkBoxText: string) {
     let newChecklistItem = new ListItem();
