@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit {
   newChecklist: CheckList;
   newChecklistItemIdKey = 'newChecklistText';
   newChecklistBoxIdKey = 'newChecklistBox';
+  checkBoxMode = false;
 
   @ViewChild('title') newTitle: ElementRef;
   @ViewChild('divNewNote') divNewNote: ElementRef;
@@ -92,41 +93,41 @@ export class HomeComponent implements OnInit {
     return this.notes.length == 0 ? 0 : Math.max.apply(Math, this.notes.map(function (o) { return o.id; }));
   }
 
-  openEditor() {
-    this.editMode = true;
-    const element = this.renderer.selectRootElement('#newText');
-    setTimeout(() => element.focus, 0);
-  }
+  // openEditor() {
+  //   this.editMode = true;
+  //   const element = this.renderer.selectRootElement('#newText');
+  //   setTimeout(() => element.focus, 0);
+  // }
 
-  closeEditor(event: FocusEvent, title: HTMLInputElement, text: HTMLTextAreaElement) {
-    let divEl = (this.divNewNote.nativeElement as HTMLElement);
-    if (divEl.contains(event.relatedTarget as HTMLElement))
-      return false;
+  // closeEditor(event: FocusEvent, title: HTMLInputElement, text: HTMLTextAreaElement) {
+  //   let divEl = (this.divNewNote.nativeElement as HTMLElement);
+  //   if (divEl.contains(event.relatedTarget as HTMLElement))
+  //     return false;
 
-    if (this.hasText(text.value)) {
-      this.saveNote(title.value, text.value);
-    }
-    text.value = "";
-    text.rows = 1;
-    title.value = "";
-    this.editMode = false;
-  }
+  //   if (this.hasText(text.value)) {
+  //     this.saveNote(title.value, text.value);
+  //   }
+  //   text.value = "";
+  //   text.rows = 1;
+  //   title.value = "";
+  //   this.editMode = false;
+  // }
 
-  textTyped(event: KeyboardEvent, text: HTMLTextAreaElement) {
-    if (event.keyCode !== 13 && (event.keyCode <= 48 || event.keyCode >= 90) && (event.keyCode <= 97 && event.keyCode >= 122)) {
-      console.log(event);
-      return false;
-    }
-    if (event.keyCode === 13)
-      text.rows++;
-    else if (event.keyCode === 8) {
-      let matchedLineBreak = RegExp(/\r\n|\r|\n/).exec(text.value[text.value.length - 1]);
-      if (!isNullOrUndefined(matchedLineBreak)) {
-        let totalNewLines = text.value.split(/\r\n|\r|\n/).length;
-        text.rows = totalNewLines > 1 ? totalNewLines - 1 : 1;
-      }
-    }
-  }
+  // textTyped(event: KeyboardEvent, text: HTMLTextAreaElement) {
+  //   if (event.keyCode !== 13 && (event.keyCode <= 48 || event.keyCode >= 90) && (event.keyCode <= 97 && event.keyCode >= 122)) {
+  //     console.log(event);
+  //     return false;
+  //   }
+  //   if (event.keyCode === 13)
+  //     text.rows++;
+  //   else if (event.keyCode === 8) {
+  //     let matchedLineBreak = RegExp(/\r\n|\r|\n/).exec(text.value[text.value.length - 1]);
+  //     if (!isNullOrUndefined(matchedLineBreak)) {
+  //       let totalNewLines = text.value.split(/\r\n|\r|\n/).length;
+  //       text.rows = totalNewLines > 1 ? totalNewLines - 1 : 1;
+  //     }
+  //   }
+  // }
 
   saveChecklist(title: string) {
     let checklist = Object.assign({}, this.newChecklist);
@@ -138,22 +139,22 @@ export class HomeComponent implements OnInit {
     return this.newChecklist.items.length > 0;
   }
 
-  openChecklist() {
-    this.editMode = true;
-  }
+  // openChecklist() {
+  //   this.editMode = true;
+  // }
 
-  checkListTyped(event: KeyboardEvent, text: HTMLInputElement) {
-    if (event.keyCode !== 13 && (event.keyCode <= 48 || event.keyCode >= 90) && (event.keyCode <= 97 && event.keyCode >= 122)) {
-      console.log(event);
-      return false;
-    }
-    if (event.keyCode === 13) {
-      if (this.hasText(text.value)) {
-        this.saveChecklistItem(text.value);
-        text.value = '';
-      }
-    }
-  }
+  // checkListTyped(event: KeyboardEvent, text: HTMLInputElement) {
+  //   if (event.keyCode !== 13 && (event.keyCode <= 48 || event.keyCode >= 90) && (event.keyCode <= 97 && event.keyCode >= 122)) {
+  //     console.log(event);
+  //     return false;
+  //   }
+  //   if (event.keyCode === 13) {
+  //     if (this.hasText(text.value)) {
+  //       this.saveChecklistItem(text.value);
+  //       text.value = '';
+  //     }
+  //   }
+  // }
 
   editExistingChecklist(event: KeyboardEvent, checklistItem: ListItem, checklistItemElement: HTMLInputElement) {
     if (event.keyCode !== 13 && (event.keyCode <= 48 || event.keyCode >= 90) && (event.keyCode <= 97 && event.keyCode >= 122)) {
@@ -192,20 +193,79 @@ export class HomeComponent implements OnInit {
     return checklist.items.length == 0 ? 0 : Math.max.apply(Math, checklist.items.map(function (o) { return o.id; }));
   }
 
-  closeChecklist(event: FocusEvent, title: HTMLInputElement, checklistText: HTMLInputElement) {
-    let divEl = (this.divNewChecklist.nativeElement as HTMLElement);
+  // closeChecklist(event: FocusEvent, title: HTMLInputElement, checklistText: HTMLInputElement) {
+  //   let divEl = (this.divNewChecklist.nativeElement as HTMLElement);
+  //   if (divEl.contains(event.relatedTarget as HTMLElement))
+  //     return false;
+
+  //   if (this.hasText(checklistText.value))
+  //     this.saveChecklistItem(checklistText.value);
+  //   if (this.hasChecklistItems()) {
+  //     this.saveChecklist(title.value);
+  //   }
+  //   this.resetChecklist();
+  //   checklistText.value = "";
+  //   title.value = "";
+  //   this.editMode = false;
+  // }
+
+  close(event: FocusEvent, title: HTMLInputElement, text: HTMLElement) {
+    let divEl = (this.divNewNote.nativeElement as HTMLElement);
     if (divEl.contains(event.relatedTarget as HTMLElement))
       return false;
 
-    //save complete checklist
-    if (this.hasText(checklistText.value))
-      this.saveChecklistItem(checklistText.value);
-    if (this.hasChecklistItems()) {
-      this.saveChecklist(title.value);
+    if (text instanceof HTMLTextAreaElement) {
+      var textArea = text as HTMLTextAreaElement;
+      if (this.hasText(textArea.value)) {
+        this.saveNote(title.value, textArea.value);
+      }
+      textArea.value = "";
+      textArea.rows = 1;
     }
-    this.resetChecklist();
-    checklistText.value = "";
+    else if (text instanceof HTMLInputElement) {
+      var inputText = text as HTMLInputElement;
+      if (this.hasText(inputText.value))
+        this.saveChecklistItem(inputText.value);
+      if (this.hasChecklistItems()) {
+        this.saveChecklist(title.value);
+      }
+      this.resetChecklist();
+      inputText.value = "";
+    }
     title.value = "";
     this.editMode = false;
+  }
+
+  typed(event: KeyboardEvent, text: HTMLElement) {
+    if (event.keyCode !== 13 && (event.keyCode <= 48 || event.keyCode >= 90) && (event.keyCode <= 97 && event.keyCode >= 122)) {
+      console.log(event);
+      return false;
+    }
+
+    if (text instanceof HTMLTextAreaElement) {
+      if (event.keyCode === 13)
+        text.rows++;
+      else if (event.keyCode === 8) {
+        let matchedLineBreak = RegExp(/\r\n|\r|\n/).exec(text.value[text.value.length - 1]);
+        if (!isNullOrUndefined(matchedLineBreak)) {
+          let totalNewLines = text.value.split(/\r\n|\r|\n/).length;
+          text.rows = totalNewLines > 1 ? totalNewLines - 1 : 1;
+        }
+      }
+    }
+    else if (text instanceof HTMLInputElement) {
+      if (event.keyCode === 13) {
+        if (this.hasText(text.value)) {
+          this.saveChecklistItem(text.value);
+          text.value = '';
+        }
+      }
+    }
+  }
+
+  open(text: HTMLElement) {
+    this.editMode = true;
+    // const element = this.renderer.selectRootElement('#newText');
+    setTimeout(() => text.focus, 0);
   }
 }

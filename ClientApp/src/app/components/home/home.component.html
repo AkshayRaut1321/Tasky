@@ -1,23 +1,19 @@
 <p>Welcome to most efficient task management app : Tasky</p>
 <p>To help you get started, we've also set up random checklists which you can play around with:</p>
-<!-- <div #divNewNote class="editNote" tabindex="-1" (click)="openEditor();" (focusout)="closeEditor($event, title, text);">
+<div *ngIf="!checkBoxMode" #divNewNote class="editNote" tabindex="-1" (click)="open(text);" (focusout)="close($event, title, text);">
   <div [hidden]="!editMode">
     <input id="newTitle" type="text" class="col-sm-5" placeholder="Title" #title>
   </div>
-  <textarea id="newText" type="text" class="col-sm-5" placeholder="Take a note..." #text
-    (keydown)="textTyped($event, text)" rows="1"></textarea>
-</div> -->
-<div #divNewChecklist class="editNote" tabindex="-1" (click)="openChecklist();"
-(focusout)="closeChecklist($event, checklistTitle, checklistText);"
-  >
+  <textarea id="newText" type="text" class="col-sm-5" placeholder="Take a note..." #text (keydown)="typed($event, text)"
+    rows="1"></textarea>
+</div>
+<div *ngIf="checkBoxMode" #divNewNote class="editNote" tabindex="-1" (click)="open(checklistText);"
+  (focusout)="close($event, newChecklistTitle, checklistText);">
   <div [hidden]="!editMode">
-    <input id="newChecklistTitle" type="text" class="col-sm-5" placeholder="Title" #checklistTitle>
+    <input id="newChecklistTitle" type="text" class="col-sm-5" placeholder="Title" #newChecklistTitle>
   </div>
   <span *ngIf="hasChecklistItems()">
     <div #checkBoxes *ngFor="let item of newChecklist.items; index as index" class="col-sm-12">
-      <!-- <label>
-        <input type="checkbox" [(ngModel)]="item.checked">
-      </label> -->
       <span class="checkbox">
         <input type="checkbox" [id]="newChecklistBoxIdKey + item.id" [(ngModel)]="item.checked">
         <label [attr.for]="newChecklistBoxIdKey + item.id"></label>
@@ -27,11 +23,9 @@
         (keypress)="editExistingChecklist($event, item, checklistItemElement)">
     </div>
   </span>
-  <div>
-    <i class="fas fa-plus red"></i>
-    <input id="newChecklistText" type="text" placeholder="Take a note..." #checklistText
-      (keypress)="checkListTyped($event, checklistText)">
-  </div>
+  <i class="fas fa-plus red"></i>
+  <input id="newChecklistText" type="text" placeholder="Take a note..." #checklistText
+    (keypress)="typed($event, checklistText)">
 </div>
 <br>
 <div class="row">
@@ -42,7 +36,6 @@
       </p>
       <span *ngIf="true">
         <label *ngFor="let item of note.items" class="col-sm-12">
-          <!-- <input type="checkbox" [checked]="item.checked">{{item.text}} -->
           <span class="checkbox">
             <input type="checkbox" [id]="newChecklistBoxIdKey + item.id" [(ngModel)]="item.checked">
             <label [attr.for]="newChecklistBoxIdKey + item.id">{{item.text}}</label>
