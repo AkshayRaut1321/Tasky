@@ -8,10 +8,9 @@
     <div *ngIf="!checkBoxMode" (click)="open();">
       <textarea id="newText" type="text" class="col-sm-5" placeholder="Take a note..." #text
         (keydown)="typed($event, text)" rows="1"></textarea>
-      <i class="far fa-check-square fa-lg" (click)="changeEditorMode(true);"></i>
     </div>
-    <div *ngIf="checkBoxMode">
-      <span *ngIf="hasChecklistItems()" (click)="open();">
+    <div *ngIf="checkBoxMode" (click)="open();">
+      <div *ngIf="hasChecklistItems()">
         <div #checkBoxes *ngFor="let item of newChecklist.items; index as index" class="col-sm-12">
           <span class="checkbox">
             <input type="checkbox" [id]="newChecklistBoxIdKey + item.id" [(ngModel)]="item.checked">
@@ -21,12 +20,12 @@
             class="newChecklistItem" #checklistItemElement
             (keypress)="editExistingChecklist($event, item, checklistItemElement)">
         </div>
-      </span>
+      </div>
       <i class="fas fa-plus red"></i>
       <input id="newText" type="text" placeholder="Take a note..." #checklistText
         (keypress)="typed($event, checklistText)">
-      <i class="far fa-check-square fa-lg" (click)="changeEditorMode(false);"></i>
     </div>
+    <i class="far fa-check-square fa-lg" (click)="changeEditorMode();"></i>
   </div>
 </div>
 <br>

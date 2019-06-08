@@ -269,25 +269,42 @@ export class HomeComponent implements OnInit {
     this.editMode = true;
     setTimeout(() => {
       const element = this.renderer.selectRootElement('#newText');
-      element.focus()
+      element.focus();
     }, 1);
   }
 
-  changeEditorMode(checkBoxMode: boolean) {
-    this.checkBoxMode = checkBoxMode;
-    var elementId = '#newText';
-    // if (this.checkBoxMode) {
-    //   elementId = '#newChecklistText';
-    // }
-    // else {
-    //   elementId = '#newText';
-    // }
-    setTimeout(() => {
-      this.open(elementId);
-    }, 0);
+  changeEditorMode() {
+    this.checkBoxMode = !this.checkBoxMode;
+    this.convertEditor();
   }
 
-  onClickedOutside(e: Event) {
-    console.log(e);
+  convertEditor() {
+    if (this.checkBoxMode) {
+      let textArea = this.renderer.selectRootElement('#newText') as HTMLTextAreaElement;
+      let textArray = textArea.value.split(/\r\n|\r|\n/);
+      textArray.forEach(element => {
+        if (this.hasText(element))
+          this.saveChecklistItem(element);
+      });
+    } else {
+      let textInput = this.renderer.selectRootElement('#newText') as HTMLInputElement;
+      let plainText = "";
+
+      this.newChecklist.items.forEach(checklistItem => {
+        plainText += (this.hasText(plainText) ? "\r\n" : "") + checklistItem.text;
+      });
+      this.resetChecklist();
+
+      if (this.hasText(textInput.value))
+        plainText += (this.hasText(plainText) ? "\r\n" : "") + textInput.value;
+      
+      setTimeout(() => {
+        let totalNewLines = plainText.split(/\r\n|\r|\n/).length;
+        let textArea = this.renderer.selectRootElement('#newText') as HTMLTextAreaElement;
+        textArea.value = plainText;
+        textArea.rows = totalNewLines > 1 ? totalNewLines : 1;
+      }, 0);
+    }
+    this.open();
   }
 }
