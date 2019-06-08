@@ -17,7 +17,7 @@ Tasks
 2.	Add a layout to show Notes - DONE
 3.	Option to add new Notes – DONE
 4.	Option to add checklist - DONE
-5.	Option to convert Note to Checklist and back
+5.	Option to convert Note to Checklist and back - In process
 6.	User should be able to add checkbox between items - DONE
 7.	If a new checkbox item is added in middle then set focus on that - DONE
 8.	Add schedule for notes

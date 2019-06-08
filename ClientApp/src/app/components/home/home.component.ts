@@ -263,9 +263,25 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  open(text: HTMLElement) {
+  open(elementId: string) {
     this.editMode = true;
-    // const element = this.renderer.selectRootElement('#newText');
-    setTimeout(() => text.focus, 0);
+    setTimeout(() => {
+      const element = this.renderer.selectRootElement(elementId);
+      element.focus()
+    }, 1);
+  }
+
+  changeEditorMode(checkBoxMode: boolean) {
+    this.checkBoxMode = checkBoxMode;
+    var elementId = null;
+    if (this.checkBoxMode) {
+      elementId = '#newChecklistText';
+    }
+    else {
+      elementId = '#newText';
+    }
+    setTimeout(() => {
+      this.open(elementId);
+    }, 0);
   }
 }

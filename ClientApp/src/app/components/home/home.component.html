@@ -1,13 +1,15 @@
 <p>Welcome to most efficient task management app : Tasky</p>
 <p>To help you get started, we've also set up random checklists which you can play around with:</p>
-<div *ngIf="!checkBoxMode" #divNewNote class="editNote" tabindex="-1" (click)="open(text);" (focusout)="close($event, title, text);">
+<div *ngIf="!checkBoxMode" #divNewNote class="editNote" tabindex="-1" (click)="open('#newText');"
+  (focusout)="close($event, title, text);">
   <div [hidden]="!editMode">
     <input id="newTitle" type="text" class="col-sm-5" placeholder="Title" #title>
   </div>
   <textarea id="newText" type="text" class="col-sm-5" placeholder="Take a note..." #text (keydown)="typed($event, text)"
     rows="1"></textarea>
+  <i class="far fa-check-square fa-lg" (click)="changeEditorMode(true);"></i>
 </div>
-<div *ngIf="checkBoxMode" #divNewNote class="editNote" tabindex="-1" (click)="open(checklistText);"
+<div *ngIf="checkBoxMode" #divNewNote class="editNote" tabindex="-1" (click)="open('#newChecklistText');"
   (focusout)="close($event, newChecklistTitle, checklistText);">
   <div [hidden]="!editMode">
     <input id="newChecklistTitle" type="text" class="col-sm-5" placeholder="Title" #newChecklistTitle>
@@ -26,6 +28,7 @@
   <i class="fas fa-plus red"></i>
   <input id="newChecklistText" type="text" placeholder="Take a note..." #checklistText
     (keypress)="typed($event, checklistText)">
+  <i class="far fa-check-square fa-lg" (click)="changeEditorMode(false);"></i>
 </div>
 <br>
 <div class="row">

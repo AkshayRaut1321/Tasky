@@ -101,3 +101,7 @@
     border: none;
     outline: 0px !important;
 }
+
+.far.fa-check-square {
+    cursor: pointer;
+}
