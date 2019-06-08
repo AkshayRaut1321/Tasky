@@ -209,31 +209,33 @@ export class HomeComponent implements OnInit {
   //   this.editMode = false;
   // }
 
-  close(event: FocusEvent, title: HTMLInputElement, text: HTMLElement) {
-    let divEl = (this.divNewNote.nativeElement as HTMLElement);
-    if (divEl.contains(event.relatedTarget as HTMLElement))
-      return false;
-
-    if (text instanceof HTMLTextAreaElement) {
-      var textArea = text as HTMLTextAreaElement;
-      if (this.hasText(textArea.value)) {
-        this.saveNote(title.value, textArea.value);
+  close(event: FocusEvent, title: HTMLInputElement) {
+    if (this.editMode) {
+      let divEl = (this.divNewNote.nativeElement as HTMLElement);
+      if (divEl.contains(event.relatedTarget as HTMLElement))
+        return false;
+      let text = this.renderer.selectRootElement('#newText');
+      if (text instanceof HTMLTextAreaElement) {
+        var textArea = text as HTMLTextAreaElement;
+        if (this.hasText(textArea.value)) {
+          this.saveNote(title.value, textArea.value);
+        }
+        textArea.value = "";
+        textArea.rows = 1;
       }
-      textArea.value = "";
-      textArea.rows = 1;
-    }
-    else if (text instanceof HTMLInputElement) {
-      var inputText = text as HTMLInputElement;
-      if (this.hasText(inputText.value))
-        this.saveChecklistItem(inputText.value);
-      if (this.hasChecklistItems()) {
-        this.saveChecklist(title.value);
+      else if (text instanceof HTMLInputElement) {
+        var inputText = text as HTMLInputElement;
+        if (this.hasText(inputText.value))
+          this.saveChecklistItem(inputText.value);
+        if (this.hasChecklistItems()) {
+          this.saveChecklist(title.value);
+        }
+        this.resetChecklist();
+        inputText.value = "";
       }
-      this.resetChecklist();
-      inputText.value = "";
+      title.value = "";
+      this.editMode = false;
     }
-    title.value = "";
-    this.editMode = false;
   }
 
   typed(event: KeyboardEvent, text: HTMLElement) {
@@ -263,25 +265,29 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  open(elementId: string) {
+  open() {
     this.editMode = true;
     setTimeout(() => {
-      const element = this.renderer.selectRootElement(elementId);
+      const element = this.renderer.selectRootElement('#newText');
       element.focus()
     }, 1);
   }
 
   changeEditorMode(checkBoxMode: boolean) {
     this.checkBoxMode = checkBoxMode;
-    var elementId = null;
-    if (this.checkBoxMode) {
-      elementId = '#newChecklistText';
-    }
-    else {
-      elementId = '#newText';
-    }
+    var elementId = '#newText';
+    // if (this.checkBoxMode) {
+    //   elementId = '#newChecklistText';
+    // }
+    // else {
+    //   elementId = '#newText';
+    // }
     setTimeout(() => {
       this.open(elementId);
     }, 0);
+  }
+
+  onClickedOutside(e: Event) {
+    console.log(e);
   }
 }
