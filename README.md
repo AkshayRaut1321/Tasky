@@ -20,7 +20,7 @@ Tasks
 5.	Option to convert Note to Checklist and back - DONE
 6.	User should be able to add checkbox between items - DONE
 7.	If a new checkbox item is added in middle then set focus on that - DONE
-8.	Add schedule for notes
+8.	Add schedule for notes - In progress
 9.	Search feature
 10.	Delete feature
 11.	History of notes
@@ -29,3 +29,4 @@ Tasks
 14.	Maximum a yearly data of checklist
 15.	Disable text copy and paste from saved notes unless user clicks on them.
 16.	Selection of notes
+17. Encapsulated new note editor into its own component - DONE
