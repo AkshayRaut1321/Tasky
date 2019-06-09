@@ -10,6 +10,7 @@ import { HomeComponent } from './components/home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ClickOutsideModule } from 'ng4-click-outside';
+import { NoteEditorComponent } from './components/note-editor/note-editor.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ClickOutsideModule } from 'ng4-click-outside';
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    NoteEditorComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

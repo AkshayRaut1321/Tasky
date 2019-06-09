@@ -1,39 +1,14 @@
 <p>Welcome to most efficient task management app : Tasky</p>
 <p>To help you get started, we've also set up random checklists which you can play around with:</p>
-<div (clickOutside)="close($event, title);">
-  <div #divNewNote class="editNote" tabindex="-1">
-    <div [hidden]="!editMode">
-      <input id="newTitle" type="text" class="col-sm-5" placeholder="Title" #title>
-    </div>
-    <div *ngIf="!checkBoxMode" (click)="open();">
-      <textarea id="newText" type="text" class="col-sm-5" placeholder="Take a note..." #text
-        (keydown)="typed($event, text)" rows="1"></textarea>
-    </div>
-    <div *ngIf="checkBoxMode" (click)="open();">
-      <div *ngIf="hasChecklistItems()">
-        <div #checkBoxes *ngFor="let item of newChecklist.items; index as index" class="col-sm-12">
-          <span class="checkbox">
-            <input type="checkbox" [id]="newChecklistBoxIdKey + item.id" [(ngModel)]="item.checked">
-            <label [attr.for]="newChecklistBoxIdKey + item.id"></label>
-          </span>
-          <input [id]="newChecklistItemIdKey + index" type="text" placeholder="Take a note..." [(ngModel)]="item.text"
-            class="newChecklistItem" #checklistItemElement
-            (keypress)="editExistingChecklist($event, item, checklistItemElement)">
-        </div>
-      </div>
-      <i class="fas fa-plus red"></i>
-      <input id="newText" type="text" placeholder="Take a note..." #checklistText
-        (keypress)="typed($event, checklistText)">
-    </div>
-    <i class="far fa-check-square fa-lg" (click)="changeEditorMode();"></i>
-  </div>
-</div>
-<br>
+<tasky-note-editor (checklistClosed)="saveChecklist($event)" (textNoteClosed)="saveNote($event)" (scheduleClicked)="showSchedule($event)">
+  <div class="dropDownSchedule" [ngClass]="{ showDropDownMenu : isScheduleVisible, hideDropDownMenu : !isScheduleVisible  }">A</div>
+</tasky-note-editor>
+<br/>
 <div class="row">
   <div class="col-sm-3 card" style="height: max-content;" *ngFor="let note of notes">
     <div class="card-body">
       <h5 class="card-title">{{note.title}}</h5>
-      <p class="card-text" *ngIf="hasText(note.text)">{{note.text}}
+      <p class="card-text" *ngIf="hasTextLocal(note.text)">{{note.text}}
       </p>
       <span *ngIf="true">
         <label *ngFor="let item of note.items" class="col-sm-12">
