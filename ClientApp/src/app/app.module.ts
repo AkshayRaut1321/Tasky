@@ -11,6 +11,7 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ClickOutsideModule } from 'ng4-click-outside';
 import { NoteEditorComponent } from './components/note-editor/note-editor.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { NoteEditorComponent } from './components/note-editor/note-editor.compon
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
     ]),
-    ClickOutsideModule
+    ClickOutsideModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
