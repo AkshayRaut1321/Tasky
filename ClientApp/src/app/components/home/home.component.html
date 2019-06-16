@@ -32,9 +32,13 @@
     <div>
       <i class="fas fa-arrow-left lg cursorPointer" (click)="openReminder()"></i>
     </div>
+    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="selectedDate" ngbDatepicker
+      #d="ngbDatepicker" (click)="d.toggle();">
     <div (click)="openScheduleRepeater()" class="cursorPointer">
-      <i class="fas fa-clock lg"></i>
-      Option B</div>
+      <ul>
+        <li></li>
+      </ul>
+    </div>
   </div>
   <div id="repeater" [hidden]="!showRepeater">
     <div>

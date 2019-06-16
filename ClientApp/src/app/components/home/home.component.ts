@@ -4,6 +4,7 @@ import { BaseNote } from '../../models/BaseNote';
 import { CheckList } from '../../models/CheckList';
 import { ListItem } from '../../models/ListItem';
 import { StringHelperService } from 'src/app/services/string-helper.service';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +20,8 @@ export class HomeComponent implements OnInit {
   showReminder = false;
   showDateTimePicker = false;
   showRepeater = false;
+  selectedDate: NgbDate;
+  internalSelectedDate: NgbDate;
 
   @ViewChild('title') newTitle: ElementRef;
   @ViewChild('text') newText: ElementRef;
@@ -68,7 +71,11 @@ export class HomeComponent implements OnInit {
   }
 
   clickedOutsideEditor() {
-    this.isScheduleVisible = false;
+    if (this.internalSelectedDate == this.selectedDate) {
+      this.isScheduleVisible = false;
+    }
+    else
+      this.internalSelectedDate = this.selectedDate;
   }
 
   saveNote(note: BaseNote) {
@@ -87,7 +94,7 @@ export class HomeComponent implements OnInit {
   }
 
   showSchedule(calendarElement: HTMLElement) {
-    this.isScheduleVisible = !this.isScheduleVisible;
+    this.isScheduleVisible = true;
     this.openReminder();
     if (this.isScheduleVisible) {
       calendarElement.parentElement.insertAdjacentElement("afterend", this.dropDownSchedule.nativeElement);
