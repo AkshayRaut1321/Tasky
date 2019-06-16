@@ -24,7 +24,6 @@
         (keypress)="typed($event, checklistText)">
     </div>
     <i class="far fa-check-square fa-lg" (click)="changeEditorMode();"></i>
-    <i class="far fa-calendar-alt fa-lg" (click)="showSchedule();"></i>
-    <ng-content select=".dropDownSchedule"></ng-content>
+    <i #calendarIcon class="far fa-calendar-alt fa-lg" (click)="showSchedule();"></i>
   </div>
 </div>

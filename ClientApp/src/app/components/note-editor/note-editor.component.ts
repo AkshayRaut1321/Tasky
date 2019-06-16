@@ -4,7 +4,6 @@ import { CheckList } from 'src/app/models/CheckList';
 import { isNullOrUndefined } from 'util';
 import { ListItem } from 'src/app/models/ListItem';
 import { Note } from 'src/app/models/Note';
-import { ChecklistClosedEventArgs } from 'src/app/interfaces/event-args/checklist-closed-event-args';
 
 @Component({
   selector: 'tasky-note-editor',
@@ -15,12 +14,12 @@ export class NoteEditorComponent implements OnInit {
   editMode = false;
   newChecklist: CheckList;
   checkBoxMode = false;
-  isScheduleVisible = false;
 
-  @Output() checklistClosed = new EventEmitter();
-  @Output() textNoteClosed = new EventEmitter();
+  @Output() editorClosed = new EventEmitter();
+  @Output() editComplete = new EventEmitter();
   @Output() scheduleClicked = new EventEmitter();
   @ViewChild('divNewNote') divNewNote: ElementRef;
+  @ViewChild('calendarIcon') calendarIcon: ElementRef;
   @ViewChildren('checkBoxes') checkBoxes: QueryList<ElementRef<HTMLElement>>;
 
   constructor(private renderer: Renderer2, private stringHelper: StringHelperService) { }
@@ -49,7 +48,7 @@ export class NoteEditorComponent implements OnInit {
           let newNote = new Note();
           newNote.text = textArea.value;
           newNote.title = title.value;
-          this.textNoteClosed.emit(newNote);
+          this.editComplete.emit(newNote);
         }
         textArea.value = "";
         textArea.rows = 1;
@@ -60,7 +59,7 @@ export class NoteEditorComponent implements OnInit {
           this.saveChecklistItem(inputText.value);
         if (this.hasChecklistItems()) {
           this.newChecklist.title = title.value;
-          this.checklistClosed.emit(this.newChecklist);
+          this.editComplete.emit(this.newChecklist);
         }
         this.resetChecklist();
         inputText.value = "";
@@ -68,6 +67,7 @@ export class NoteEditorComponent implements OnInit {
       title.value = "";
       this.editMode = false;
     }
+    this.editorClosed.emit();
   }
 
   hasChecklistItems() {
@@ -175,7 +175,6 @@ export class NoteEditorComponent implements OnInit {
   }
 
   showSchedule() {
-    this.isScheduleVisible = !this.isScheduleVisible;
-    this.scheduleClicked.emit(this.isScheduleVisible);
+    this.scheduleClicked.emit(this.calendarIcon.nativeElement);
   }
 }

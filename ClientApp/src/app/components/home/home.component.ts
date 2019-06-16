@@ -16,10 +16,14 @@ export class HomeComponent implements OnInit {
   newChecklistBoxIdKey = 'newChecklistBox';
   hasTextLocal = StringHelperService.hasText;
   isScheduleVisible = false;
+  showReminder = false;
+  showDateTimePicker = false;
+  showRepeater = false;
 
   @ViewChild('title') newTitle: ElementRef;
   @ViewChild('text') newText: ElementRef;
   @ViewChild('divNewChecklist') divNewChecklist: ElementRef;
+  @ViewChild('dropDownSchedule') dropDownSchedule: ElementRef;
 
   constructor() {
 
@@ -59,22 +63,52 @@ export class HomeComponent implements OnInit {
     this.notes.push(checkList);
   }
 
-  saveNote(newNote: Note) {
-    newNote.id = this.getMaxNoteId() + 1;
-    this.notes.push(newNote);
-  }
-
   getMaxNoteId(): number {
     return this.notes.length == 0 ? 0 : Math.max.apply(Math, this.notes.map(function (o) { return o.id; }));
   }
 
-  saveChecklist(newChecklist: CheckList) {
-    let checklist = Object.assign({}, newChecklist);
-    checklist.title = newChecklist.title;
-    this.notes.push(checklist);
+  clickedOutsideEditor() {
+    this.isScheduleVisible = false;
   }
 
-  showSchedule(isScheduleVisible : boolean) {
-    this.isScheduleVisible = isScheduleVisible;
+  saveNote(note: BaseNote) {
+    if (note instanceof Note) {
+      let newNote = note as Note;
+      newNote.id = this.getMaxNoteId() + 1;
+      this.notes.push(newNote);
+    }
+    else if (note instanceof CheckList) {
+      let newChecklist = note as CheckList;
+      let checklist = Object.assign({}, newChecklist);
+      checklist.title = newChecklist.title;
+      this.notes.push(checklist);
+    }
+    this.isScheduleVisible = false;
+  }
+
+  showSchedule(calendarElement: HTMLElement) {
+    this.isScheduleVisible = !this.isScheduleVisible;
+    this.openReminder();
+    if (this.isScheduleVisible) {
+      calendarElement.parentElement.insertAdjacentElement("afterend", this.dropDownSchedule.nativeElement);
+    }
+  }
+
+  openReminder() {
+    this.showReminder = true;
+    this.showDateTimePicker = false;
+    this.showRepeater = false;
+  }
+
+  openDateTimePicker() {
+    this.showReminder = false;
+    this.showDateTimePicker = true;
+    this.showRepeater = false;
+  }
+
+  openScheduleRepeater() {
+    this.showReminder = false;
+    this.showDateTimePicker = false;
+    this.showRepeater = true;
   }
 }

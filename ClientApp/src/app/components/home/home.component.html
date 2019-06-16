@@ -1,9 +1,9 @@
 <p>Welcome to most efficient task management app : Tasky</p>
 <p>To help you get started, we've also set up random checklists which you can play around with:</p>
-<tasky-note-editor (checklistClosed)="saveChecklist($event)" (textNoteClosed)="saveNote($event)" (scheduleClicked)="showSchedule($event)">
-  <div class="dropDownSchedule" [ngClass]="{ showDropDownMenu : isScheduleVisible, hideDropDownMenu : !isScheduleVisible  }">A</div>
+<tasky-note-editor (editorClosed)="clickedOutsideEditor($event)" (editComplete)="saveNote($event)"
+  (scheduleClicked)="showSchedule($event)">
 </tasky-note-editor>
-<br/>
+<br />
 <div class="row">
   <div class="col-sm-3 card" style="height: max-content;" *ngFor="let note of notes">
     <div class="card-body">
@@ -21,3 +21,27 @@
     </div>
   </div>
 </div>
+<div id="dropDownSchedule" #dropDownSchedule [hidden]="!isScheduleVisible" class="scheduleMenu">
+  <div id="reminderMenu" [hidden]="!showReminder">
+    <div (click)="openDateTimePicker()" class="cursorPointer">
+      <i class="fas fa-clock lg"></i>
+      Pick date and time
+    </div>
+  </div>
+  <div id="dateTimePicker" [hidden]="!showDateTimePicker">
+    <div>
+      <i class="fas fa-arrow-left lg cursorPointer" (click)="openReminder()"></i>
+    </div>
+    <div (click)="openScheduleRepeater()" class="cursorPointer">
+      <i class="fas fa-clock lg"></i>
+      Option B</div>
+  </div>
+  <div id="repeater" [hidden]="!showRepeater">
+    <div>
+      <i class="fas fa-arrow-left lg cursorPointer" (click)="openDateTimePicker()"></i>
+    </div>
+    <div class="cursorPointer"><i class="fas fa-clock lg"></i> Option C
+    </div>
+  </div>
+</div>
+<!-- </ng-template> -->
