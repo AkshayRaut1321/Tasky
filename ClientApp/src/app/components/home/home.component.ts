@@ -21,10 +21,15 @@ export class HomeComponent implements OnInit {
   showReminder = false;
   showDateTimePicker = false;
   showRepeater = false;
+
   selectedDate: NgbDate;
   internalSelectedDate: NgbDate;
+
   time: NgbTimeStruct;
   repeaters: ScheduleRepeater[];
+
+  selectedRepeat: ScheduleRepeater;
+  internalSelectedRepeat: ScheduleRepeater;
 
   @ViewChild('title') newTitle: ElementRef;
   @ViewChild('text') newText: ElementRef;
@@ -38,12 +43,12 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.notes = [];
     this.repeaters = [];
-    this.repeaters.push({ Key: 0, Name: "Does not repeat" });
-    this.repeaters.push({ Key: 1, Name: "Daily" });
-    this.repeaters.push({ Key: 2, Name: "Weekly" });
-    this.repeaters.push({ Key: 3, Name: "Monthly" });
-    this.repeaters.push({ Key: 4, Name: "Yearly" });
-    this.repeaters.push({ Key: 5, Name: "Custom" });
+    this.repeaters.push({ id: 0, name: "Does not repeat" });
+    this.repeaters.push({ id: 1, name: "Daily" });
+    this.repeaters.push({ id: 2, name: "Weekly" });
+    this.repeaters.push({ id: 3, name: "Monthly" });
+    this.repeaters.push({ id: 4, name: "Yearly" });
+    this.repeaters.push({ id: 5, name: "Custom" });
 
     let textNote = new Note();
     textNote.id = 1;
@@ -81,7 +86,7 @@ export class HomeComponent implements OnInit {
   }
 
   clickedOutsideEditor() {
-    if (this.internalSelectedDate == this.selectedDate) {
+    if (this.internalSelectedDate == this.selectedDate && this.internalSelectedRepeat == this.selectedRepeat) {
       this.isScheduleVisible = false;
     }
     else
@@ -127,5 +132,9 @@ export class HomeComponent implements OnInit {
     this.showReminder = false;
     this.showDateTimePicker = false;
     this.showRepeater = true;
+  }
+
+  onResetFired() {
+    this.selectedRepeat = this.repeaters[0];
   }
 }

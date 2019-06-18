@@ -36,9 +36,10 @@
       ngbDatepicker #d="ngbDatepicker" (click)="d.toggle();" autocomplete="off">
     <br />
     <br />
-    <ngb-timepicker [(ngModel)]="time" [spinners]="false"></ngb-timepicker>
-    <div>
-    </div>
+    <ngb-timepicker [(ngModel)]="time" [spinners]="false" [meridian]="true"></ngb-timepicker>
+    <br />
+    <ngx-multiselect [(ngModel)]="selectedRepeat" [options]="repeaters" ngDefaultControl
+    (onReset)="onResetFired()"></ngx-multiselect>
   </div>
   <div id="repeater" [hidden]="!showRepeater">
     <div>

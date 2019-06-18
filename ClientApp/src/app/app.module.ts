@@ -12,6 +12,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ClickOutsideModule } from 'ng4-click-outside';
 import { NoteEditorComponent } from './components/note-editor/note-editor.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxMultiselectModule } from '@ngx-lib/multiselect';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
       { path: 'fetch-data', component: FetchDataComponent },
     ]),
     ClickOutsideModule,
-    NgbModule
+    NgbModule,
+    NgxMultiselectModule
   ],
   providers: [],
   bootstrap: [AppComponent]
