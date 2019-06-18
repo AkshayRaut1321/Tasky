@@ -4,7 +4,8 @@ import { BaseNote } from '../../models/BaseNote';
 import { CheckList } from '../../models/CheckList';
 import { ListItem } from '../../models/ListItem';
 import { StringHelperService } from 'src/app/services/string-helper.service';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import { ScheduleRepeater } from 'src/app/models/ScheduleRepeater';
 
 @Component({
   selector: 'app-home',
@@ -22,6 +23,8 @@ export class HomeComponent implements OnInit {
   showRepeater = false;
   selectedDate: NgbDate;
   internalSelectedDate: NgbDate;
+  time: NgbTimeStruct;
+  repeaters: ScheduleRepeater[];
 
   @ViewChild('title') newTitle: ElementRef;
   @ViewChild('text') newText: ElementRef;
@@ -34,6 +37,13 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.notes = [];
+    this.repeaters = [];
+    this.repeaters.push({ Key: 0, Name: "Does not repeat" });
+    this.repeaters.push({ Key: 1, Name: "Daily" });
+    this.repeaters.push({ Key: 2, Name: "Weekly" });
+    this.repeaters.push({ Key: 3, Name: "Monthly" });
+    this.repeaters.push({ Key: 4, Name: "Yearly" });
+    this.repeaters.push({ Key: 5, Name: "Custom" });
 
     let textNote = new Note();
     textNote.id = 1;
