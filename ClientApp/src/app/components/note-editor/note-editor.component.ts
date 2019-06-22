@@ -29,18 +29,17 @@ export class NoteEditorComponent implements OnInit {
   }
 
   open() {
-    this.editMode = true;
-    setTimeout(() => {
-      const element = this.renderer.selectRootElement('#newText');
-      element.focus();
-    }, 1);
+    if (!this.editMode) {
+      this.editMode = true;
+      setTimeout(() => {
+        const element = this.renderer.selectRootElement('#newText');
+        element.focus();
+      }, 1);
+    }
   }
 
   close(event: FocusEvent, title: HTMLInputElement) {
     if (this.editMode) {
-      let divEl = (this.divNewNote.nativeElement as HTMLElement);
-      if (divEl.contains(event.relatedTarget as HTMLElement))
-        return false;
       let text = this.renderer.selectRootElement('#newText');
       if (text instanceof HTMLTextAreaElement) {
         var textArea = text as HTMLTextAreaElement;
@@ -176,5 +175,11 @@ export class NoteEditorComponent implements OnInit {
 
   showSchedule() {
     this.scheduleClicked.emit(this.calendarIcon.nativeElement);
+  }
+
+  deleteChecklistItem(item: ListItem) {
+    setTimeout(() => {
+      this.newChecklist.items.splice(this.newChecklist.items.indexOf(item), 1);
+    }, 0);
   }
 }

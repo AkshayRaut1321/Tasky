@@ -5,7 +5,7 @@
 </tasky-note-editor>
 <br />
 <div class="row">
-  <div class="col-sm-3 card" style="height: max-content;" *ngFor="let note of notes">
+  <div class="col-sm-3 card" style="height: max-content;" *ngFor="let note of notes| reverseArray ; trackBy: note?.id">
     <div class="card-body">
       <h5 class="card-title">{{note.title}}</h5>
       <p class="card-text" *ngIf="hasTextLocal(note.text)">{{note.text}}
@@ -38,14 +38,13 @@
     <br />
     <ngb-timepicker [(ngModel)]="time" [spinners]="false" [meridian]="true"></ngb-timepicker>
     <br />
-    <ngx-multiselect [(ngModel)]="selectedRepeat" [options]="repeaters" ngDefaultControl
-    (onReset)="onResetFired()"></ngx-multiselect>
+    <ngx-multiselect [(ngModel)]="selectedRepeat" [options]="repeaters" ngDefaultControl (onReset)="onResetFired()">
+    </ngx-multiselect>
   </div>
   <div id="repeater" [hidden]="!showRepeater">
-    <div>
-      <i class="fas fa-arrow-left lg cursorPointer" (click)="openDateTimePicker()"></i>
-    </div>
-    <div class="cursorPointer"><i class="fas fa-clock lg"></i> Option C
+    <i class="fas fa-arrow-left lg cursorPointer" (click)="openDateTimePicker()"></i>
+    <div class="cursorPointer">
+      <i class="fas fa-clock lg"></i> Option C
     </div>
   </div>
 </div>

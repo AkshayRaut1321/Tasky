@@ -13,6 +13,7 @@ import { ClickOutsideModule } from 'ng4-click-outside';
 import { NoteEditorComponent } from './components/note-editor/note-editor.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMultiselectModule } from '@ngx-lib/multiselect';
+import { ReverseArrayPipe } from './pipes/reverse-array.pipe';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { NgxMultiselectModule } from '@ngx-lib/multiselect';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    NoteEditorComponent
+    NoteEditorComponent,
+    ReverseArrayPipe
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -17,6 +17,7 @@
           <input [id]="newChecklistItemIdKey + index" type="text" placeholder="Take a note..." [(ngModel)]="item.text"
             class="newChecklistItem" #checklistItemElement
             (keypress)="editExistingChecklist($event, item, checklistItemElement)">
+          <i class="fas fa-times" (click)="deleteChecklistItem(item);"></i>
         </div>
       </div>
       <i class="fas fa-plus red"></i>
@@ -24,6 +25,6 @@
         (keypress)="typed($event, checklistText)">
     </div>
     <i class="far fa-check-square fa-lg" (click)="changeEditorMode();"></i>
-    <i #calendarIcon class="far fa-calendar-alt fa-lg" (click)="showSchedule();"></i>
+    <i #calendarIcon [hidden]="!editMode" class="far fa-calendar-alt fa-lg" (click)="showSchedule();"></i>
   </div>
 </div>

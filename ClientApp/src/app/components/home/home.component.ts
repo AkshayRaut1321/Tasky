@@ -97,13 +97,13 @@ export class HomeComponent implements OnInit {
     if (note instanceof Note) {
       let newNote = note as Note;
       newNote.id = this.getMaxNoteId() + 1;
-      this.notes.push(newNote);
+      this.notes.splice(0, 0, newNote);
     }
     else if (note instanceof CheckList) {
       let newChecklist = note as CheckList;
       let checklist = Object.assign({}, newChecklist);
       checklist.title = newChecklist.title;
-      this.notes.push(checklist);
+      this.notes.splice(0, 0, checklist);
     }
     this.isScheduleVisible = false;
   }
@@ -137,4 +137,8 @@ export class HomeComponent implements OnInit {
   onResetFired() {
     this.selectedRepeat = this.repeaters[0];
   }
+
+  trackByItems(index: number, item: ListItem): number {
+    return item.id;
+  };
 }
