@@ -31,10 +31,7 @@ export class NoteEditorComponent implements OnInit {
   open() {
     if (!this.editMode) {
       this.editMode = true;
-      setTimeout(() => {
-        const element = this.renderer.selectRootElement('#newText');
-        element.focus();
-      }, 1);
+      this.setFocus('#newText');
     }
   }
 
@@ -114,9 +111,8 @@ export class NoteEditorComponent implements OnInit {
       this.newChecklist.items.splice(existingChecklistItemIndex + 1, 0, newChecklistItem);
       setTimeout(() => {
         var data = this.checkBoxes.toArray();
-        var currentElementIndex = data.findIndex((a: ElementRef<HTMLElement>) => a.nativeElement.lastChild == checklistItemElement);
-        var nextElement = data[currentElementIndex + 1].nativeElement.lastChild as HTMLElement;
-        nextElement.focus();
+        let nextFocusEl = data[existingChecklistItemIndex + 1];
+        (nextFocusEl.nativeElement.firstChild.nextSibling as HTMLElement).focus();
       }, 1);
     }
   }
@@ -167,6 +163,14 @@ export class NoteEditorComponent implements OnInit {
       }, 0);
     }
     this.open();
+    this.setFocus('#newText');
+  }
+
+  setFocus(selector : string) {
+    setTimeout(() => {
+      const element = this.renderer.selectRootElement(selector);
+      element.focus();
+    }, 1);
   }
 
   getMaxChecklistItemId(checklist: CheckList): number {
