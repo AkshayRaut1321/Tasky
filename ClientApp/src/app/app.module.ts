@@ -14,6 +14,7 @@ import { NoteEditorComponent } from './components/note-editor/note-editor.compon
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMultiselectModule } from '@ngx-lib/multiselect';
 import { ReverseArrayPipe } from './pipes/reverse-array.pipe';
+import { ScheduleMenuComponent } from './components/schedule-menu/schedule-menu.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ReverseArrayPipe } from './pipes/reverse-array.pipe';
     CounterComponent,
     FetchDataComponent,
     NoteEditorComponent,
-    ReverseArrayPipe
+    ReverseArrayPipe,
+    ScheduleMenuComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

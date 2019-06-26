@@ -71,19 +71,6 @@
     }
 }
 
-#dropDownSchedule {
-    position: absolute;
-    padding: 10px;
-    border: 1px solid rgba(0, 0, 0, .125);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
-    z-index: 1;
-    background-color: white;
-}
-
-.scheduleMenu {
-    user-select: none;
-}
-
 .cursorPointer {
     cursor: pointer;
 }

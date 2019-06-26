@@ -1,7 +1,6 @@
 <p>Welcome to most efficient task management app : Tasky</p>
 <p>To help you get started, we've also set up random checklists which you can play around with:</p>
-<tasky-note-editor (editorClosed)="clickedOutsideEditor()" (editComplete)="saveNote($event)"
-  (scheduleClicked)="showSchedule($event)">
+<tasky-note-editor (editorClosed)="editorClosed()" (editComplete)="saveNote($event)">
 </tasky-note-editor>
 <br />
 <div class="row">
@@ -21,31 +20,3 @@
     </div>
   </div>
 </div>
-<div id="dropDownSchedule" #dropDownSchedule [hidden]="!isScheduleVisible" class="scheduleMenu">
-  <div id="reminderMenu" [hidden]="!showReminder">
-    <div (click)="openDateTimePicker()" class="cursorPointer">
-      <i class="fas fa-clock lg"></i>
-      Pick date and time
-    </div>
-  </div>
-  <div id="dateTimePicker" [hidden]="!showDateTimePicker">
-    <div>
-      <i class="fas fa-arrow-left lg cursorPointer" (click)="openReminder()"></i>
-    </div>
-    <input class="noBorderOutline bottomBorder" placeholder="Add a date" name="dp" [(ngModel)]="selectedDate"
-      ngbDatepicker #d="ngbDatepicker" (click)="d.toggle();" autocomplete="off">
-    <br />
-    <br />
-    <ngb-timepicker [(ngModel)]="time" [spinners]="false" [meridian]="true"></ngb-timepicker>
-    <br />
-    <ngx-multiselect [(ngModel)]="selectedRepeat" [options]="repeaters" ngDefaultControl (onReset)="onResetFired()">
-    </ngx-multiselect>
-  </div>
-  <div id="repeater" [hidden]="!showRepeater">
-    <i class="fas fa-arrow-left lg cursorPointer" (click)="openDateTimePicker()"></i>
-    <div class="cursorPointer">
-      <i class="fas fa-clock lg"></i> Option C
-    </div>
-  </div>
-</div>
-<!-- </ng-template> -->

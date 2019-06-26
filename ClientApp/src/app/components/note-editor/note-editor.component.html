@@ -19,12 +19,13 @@
             (keypress)="editExistingChecklist($event, item, checklistItemElement)">
           <i class="fas fa-times" (click)="deleteChecklistItem(item);"></i>
         </div>
-      </div>
+      </div>saveSchedule
       <i class="fas fa-plus red"></i>
       <input id="newText" type="text" placeholder="Take a note..." #checklistText
         (keypress)="typed($event, checklistText)">
     </div>
     <i class="far fa-check-square fa-lg" (click)="changeEditorMode();"></i>
     <i #calendarIcon [hidden]="!editMode" class="far fa-calendar-alt fa-lg" (click)="showSchedule();"></i>
+    <tasky-schedule-menu [hidden]="!isScheduleVisible" (scheduleChanged)="scheduleChanged($event)" (saveSchedule)="saveSchedule($event)"></tasky-schedule-menu>
   </div>
 </div>

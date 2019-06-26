@@ -4,6 +4,8 @@ import { CheckList } from 'src/app/models/CheckList';
 import { isNullOrUndefined } from 'util';
 import { ListItem } from 'src/app/models/ListItem';
 import { Note } from 'src/app/models/Note';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { ScheduleRepeater } from 'src/app/models/ScheduleRepeater';
 
 @Component({
   selector: 'tasky-note-editor',
@@ -14,10 +16,18 @@ export class NoteEditorComponent implements OnInit {
   editMode = false;
   newChecklist: CheckList;
   checkBoxMode = false;
+  isScheduleVisible = false;
+
+  selectedDate: NgbDate;
+  internalSelectedDate: NgbDate;
+
+  selectedRepeat: ScheduleRepeater;
+  internalSelectedRepeat: ScheduleRepeater;
+
+  scheduleClicked: boolean;
 
   @Output() editorClosed = new EventEmitter();
   @Output() editComplete = new EventEmitter();
-  @Output() scheduleClicked = new EventEmitter();
   @ViewChild('divNewNote') divNewNote: ElementRef;
   @ViewChild('calendarIcon') calendarIcon: ElementRef;
   @ViewChildren('checkBoxes') checkBoxes: QueryList<ElementRef<HTMLElement>>;
@@ -36,6 +46,11 @@ export class NoteEditorComponent implements OnInit {
   }
 
   close(event: FocusEvent, title: HTMLInputElement) {
+    if (this.scheduleClicked) {
+      this.scheduleClicked = false;
+      return;
+    }
+
     if (this.editMode) {
       let text = this.renderer.selectRootElement('#newText');
       if (text instanceof HTMLTextAreaElement) {
@@ -166,7 +181,7 @@ export class NoteEditorComponent implements OnInit {
     this.setFocus('#newText');
   }
 
-  setFocus(selector : string) {
+  setFocus(selector: string) {
     setTimeout(() => {
       const element = this.renderer.selectRootElement(selector);
       element.focus();
@@ -178,12 +193,27 @@ export class NoteEditorComponent implements OnInit {
   }
 
   showSchedule() {
-    this.scheduleClicked.emit(this.calendarIcon.nativeElement);
+    this.isScheduleVisible = true;
   }
 
   deleteChecklistItem(item: ListItem) {
     setTimeout(() => {
       this.newChecklist.items.splice(this.newChecklist.items.indexOf(item), 1);
     }, 0);
+  }
+
+  scheduleChanged(isChanged: boolean) {
+    this.scheduleClicked = isChanged;
+  }
+
+  repeaterSelected(data: ScheduleRepeater) {
+    this.selectedRepeat = data;
+  }
+
+  saveSchedule(event: { date: NgbDate, repeat: ScheduleRepeater }) {
+    this.selectedDate = event.date;
+    this.selectedRepeat = event.repeat;
+    this.scheduleClicked = true;
+    this.isScheduleVisible = false;
   }
 }

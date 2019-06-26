@@ -4,8 +4,6 @@ import { BaseNote } from '../../models/BaseNote';
 import { CheckList } from '../../models/CheckList';
 import { ListItem } from '../../models/ListItem';
 import { StringHelperService } from 'src/app/services/string-helper.service';
-import { NgbDate, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
-import { ScheduleRepeater } from 'src/app/models/ScheduleRepeater';
 
 @Component({
   selector: 'app-home',
@@ -17,24 +15,10 @@ export class HomeComponent implements OnInit {
   newChecklistItemIdKey = 'newChecklistText';
   newChecklistBoxIdKey = 'newChecklistBox';
   hasTextLocal = StringHelperService.hasText;
-  isScheduleVisible = false;
-  showReminder = false;
-  showDateTimePicker = false;
-  showRepeater = false;
-
-  selectedDate: NgbDate;
-  internalSelectedDate: NgbDate;
-
-  time: NgbTimeStruct;
-  repeaters: ScheduleRepeater[];
-
-  selectedRepeat: ScheduleRepeater;
-  internalSelectedRepeat: ScheduleRepeater;
 
   @ViewChild('title') newTitle: ElementRef;
   @ViewChild('text') newText: ElementRef;
   @ViewChild('divNewChecklist') divNewChecklist: ElementRef;
-  @ViewChild('dropDownSchedule') dropDownSchedule: ElementRef;
 
   constructor() {
 
@@ -42,13 +26,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.notes = [];
-    this.repeaters = [];
-    this.repeaters.push({ id: 0, name: "Does not repeat" });
-    this.repeaters.push({ id: 1, name: "Daily" });
-    this.repeaters.push({ id: 2, name: "Weekly" });
-    this.repeaters.push({ id: 3, name: "Monthly" });
-    this.repeaters.push({ id: 4, name: "Yearly" });
-    this.repeaters.push({ id: 5, name: "Custom" });
 
     let textNote = new Note();
     textNote.id = 1;
@@ -85,12 +62,7 @@ export class HomeComponent implements OnInit {
     return this.notes.length == 0 ? 0 : Math.max.apply(Math, this.notes.map(function (o) { return o.id; }));
   }
 
-  clickedOutsideEditor() {
-    if (this.internalSelectedDate == this.selectedDate && this.internalSelectedRepeat == this.selectedRepeat) {
-      this.isScheduleVisible = false;
-    }
-    else
-      this.internalSelectedDate = this.selectedDate;
+  editorClosed() {
   }
 
   saveNote(note: BaseNote) {
@@ -105,37 +77,6 @@ export class HomeComponent implements OnInit {
       checklist.title = newChecklist.title;
       this.notes.splice(0, 0, checklist);
     }
-    this.isScheduleVisible = false;
-  }
-
-  showSchedule(calendarElement: HTMLElement) {
-    this.isScheduleVisible = true;
-    this.openReminder();
-    if (this.isScheduleVisible) {
-      calendarElement.parentElement.insertAdjacentElement("afterend", this.dropDownSchedule.nativeElement);
-    }
-  }
-
-  openReminder() {
-    this.showReminder = true;
-    this.showDateTimePicker = false;
-    this.showRepeater = false;
-  }
-
-  openDateTimePicker() {
-    this.showReminder = false;
-    this.showDateTimePicker = true;
-    this.showRepeater = false;
-  }
-
-  openScheduleRepeater() {
-    this.showReminder = false;
-    this.showDateTimePicker = false;
-    this.showRepeater = true;
-  }
-
-  onResetFired() {
-    this.selectedRepeat = this.repeaters[0];
   }
 
   trackByItems(index: number, item: ListItem): number {
