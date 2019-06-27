@@ -1,8 +1,10 @@
-import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
-import { NgbDate, NgbDatepicker, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
+import { NgbDate, NgbInputDatepicker, NgbTimeStruct, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { ScheduleRepeater } from 'src/app/models/ScheduleRepeater';
 import { ScheduleNotification } from 'src/app/models/ScheduleNotification';
+import { isNullOrUndefined } from 'util';
 import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
+import { NgbTimeStructAdapter } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time-adapter';
 
 @Component({
   selector: 'tasky-schedule-menu',
@@ -18,6 +20,8 @@ export class ScheduleMenuComponent implements OnInit {
   scheduledRepeat: ScheduleRepeater;
   scheduledDate: NgbDate;
   scheduledTime: NgbTime;
+  minDate: NgbDate;
+  startDate: NgbDate;
 
   @ViewChild('dropDownSchedule') dropDownSchedule: ElementRef;
   @Output() scheduleChanged = new EventEmitter();
@@ -33,6 +37,16 @@ export class ScheduleMenuComponent implements OnInit {
     this.repeaters.push({ id: 3, name: "Monthly" });
     this.repeaters.push({ id: 4, name: "Yearly" });
     this.repeaters.push({ id: 5, name: "Custom" });
+    
+    let currentDate = new Date();
+    this.minDate = new NgbDate(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
+    this.scheduledDate = this.minDate;
+    let tempTime = {};
+    this.scheduledTime = (tempTime as NgbTime);
+    this.scheduledTime.hour = currentDate.getHours();
+    this.scheduledTime.minute = currentDate.getMinutes();
+    this.onResetFired();
+
   }
 
   showSchedule() {
@@ -70,7 +84,15 @@ export class ScheduleMenuComponent implements OnInit {
   }
 
   save() {
+    if (isNullOrUndefined(this.scheduledDate) || isNullOrUndefined(this.scheduledTime))
+      return;
     this.saveSchedule.emit(new ScheduleNotification(this.scheduledDate, this.scheduledTime, this.scheduledRepeat));
   }
 
+  datePickerClosed() {
+    if (isNullOrUndefined(this.scheduledDate)) {
+      let currentDate = new Date();
+      this.scheduledDate = new NgbDate(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+    }
+  }
 }

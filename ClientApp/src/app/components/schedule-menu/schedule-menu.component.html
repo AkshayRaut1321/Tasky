@@ -10,14 +10,19 @@
       <i class="fas fa-arrow-left lg cursorPointer" (click)="openReminder()"></i>
     </div>
     <input class="noBorderOutline bottomBorder" placeholder="Add a date" name="dp" [(ngModel)]="scheduledDate"
-      ngbDatepicker #d="ngbDatepicker" (click)="showDatePicker(d)" autocomplete="off" (dateSelect)="scheduleChange()">
+      ngbDatepicker #d="ngbDatepicker" (click)="showDatePicker(d)" autocomplete="off" (dateSelect)="scheduleChange()"
+      [minDate]="minDate" (closed)="datePickerClosed()">
     <br />
     <br />
-    <ngb-timepicker [(ngModel)]="scheduledTime" [spinners]="false" [meridian]="true"></ngb-timepicker>
+    <ngb-timepicker [(ngModel)]="scheduledTime" [spinners]="false" [meridian]="true">
+    </ngb-timepicker>
     <br />
-    <ngx-multiselect [(ngModel)]="scheduledRepeat" [options]="repeaters" ngDefaultControl (onReset)="onResetFired()" (onItemClick)="scheduleChange()">
+    <ngx-multiselect [(ngModel)]="scheduledRepeat" [options]="repeaters" (onReset)="onResetFired()"
+      (onItemClick)="scheduleChange()">
     </ngx-multiselect>
-    <button (click)="save()"></button>
+    <div>
+      <div class="col-sm-4 saveScheduleButton" (click)="save()">Save</div>
+    </div>
   </div>
   <div id="repeater" [hidden]="!showRepeater">
     <i class="fas fa-arrow-left lg cursorPointer" (click)="openDateTimePicker()"></i>

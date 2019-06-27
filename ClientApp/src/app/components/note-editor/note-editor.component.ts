@@ -8,6 +8,9 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { ScheduleRepeater } from 'src/app/models/ScheduleRepeater';
 import { ScheduleNotification } from 'src/app/models/ScheduleNotification';
 import { Schedule } from 'src/app/models/Schedule';
+import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
+import { DateService } from 'src/app/services/date-service';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'tasky-note-editor',
@@ -22,7 +25,11 @@ export class NoteEditorComponent implements OnInit {
   scheduleClicked: boolean;
   selectedSchedule: Schedule;
   selectedScheduleDate: NgbDate;
+  selectedScheduleTime: NgbTime;
   selectedScheduleRepeat: ScheduleRepeater;
+  message: string;
+  isScheduleValid: boolean;
+  watchScheduleValidity: Subscription;
 
   @Output() editorClosed = new EventEmitter();
   @Output() editComplete = new EventEmitter();
@@ -30,10 +37,13 @@ export class NoteEditorComponent implements OnInit {
   @ViewChild('calendarIcon') calendarIcon: ElementRef;
   @ViewChildren('checkBoxes') checkBoxes: QueryList<ElementRef<HTMLElement>>;
 
-  constructor(private renderer: Renderer2, private stringHelper: StringHelperService) { }
+  constructor(private renderer: Renderer2) { }
 
   ngOnInit() {
     this.resetChecklist();
+    this.watchScheduleValidity = interval(1000).subscribe((data) => {
+      this.nextSchedule();
+    });
   }
 
   open() {
@@ -207,23 +217,61 @@ export class NoteEditorComponent implements OnInit {
   saveSchedule(schedule: ScheduleNotification) {
     this.selectedSchedule = new Schedule();
     this.selectedScheduleDate = schedule.Date;
+    this.selectedScheduleTime = schedule.Time;
     this.selectedScheduleRepeat = schedule.Repeat;
-    this.selectedSchedule.startDate = new Date(schedule.Date.year, schedule.Date.month, schedule.Date.day);
+    this.selectedSchedule.startDate = new Date(schedule.Date.year, schedule.Date.month - 1, schedule.Date.day,
+      schedule.Time.hour, schedule.Time.minute);
     this.selectedSchedule.repeat = schedule.Repeat;
-    this.selectedSchedule.time = schedule.Time;
-    this.scheduleClicked = true;
     this.isScheduleVisible = false;
+    this.nextSchedule();
   }
 
   isScheduleAssigned(): boolean {
     return this.selectedSchedule != null && this.selectedSchedule != undefined;
   }
 
-  nextSchedule(): string {
-    let message: string;
-    if (this.selectedSchedule.repeat.name == "Daily") {
-      message = "Today";
+  nextSchedule() {
+    if (!isNullOrUndefined(this.selectedSchedule)) {
+      let currentDate = new Date();
+      const dateDiff = (this.selectedSchedule.startDate as any) - (currentDate as any);
+      const scheduledYear = this.selectedSchedule.startDate.getFullYear();
+      const scheduledMonth = this.selectedSchedule.startDate.getMonth();
+      const scheduledDate = this.selectedSchedule.startDate.getDate();
+      const scheduledHour = this.selectedSchedule.startDate.getHours();
+      const scheduledMinute = this.selectedSchedule.startDate.getMinutes();
+      const scheduleTime = this.selectedSchedule.startDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      if (dateDiff != 0) {
+        if (scheduledYear > currentDate.getFullYear()) {
+          console.log('year');
+          this.message = scheduledYear.toString() + " " + DateService.monthNames[scheduledMonth] + " "
+            + scheduledDate.toString() + " " + scheduleTime
+        }
+        else if (scheduledMonth > currentDate.getMonth()) {
+          console.log('month');
+          this.message = DateService.monthNames[scheduledMonth] + " "
+            + scheduledDate.toString() + " " + scheduleTime;
+        }
+        else if (scheduledDate > currentDate.getDate()) {
+          console.log('day');
+          this.message = scheduleTime;
+          if ((scheduledDate - currentDate.getDate()) == 1)
+            this.message = "Tomorrow " + this.message;
+          else
+            this.message = DateService.monthNames[scheduledMonth] + " " + scheduledDate.toString() + " " + this.message;
+        }
+        else if (scheduledYear == currentDate.getFullYear() && scheduledMonth == currentDate.getMonth() && scheduledDate == currentDate.getDate()
+          && scheduledHour == currentDate.getHours() && (scheduledMinute == currentDate.getMinutes() || scheduledMinute <= currentDate.getMinutes())) {
+          this.message = "Today " + scheduleTime;
+          this.isScheduleValid = false;
+          this.watchScheduleValidity.remove(this.watchScheduleValidity);
+          return;
+        }
+        else if (scheduledDate == currentDate.getDate()) {
+          console.log('today');
+          this.message = "Today " + scheduleTime;
+        }
+        this.isScheduleValid = true;
+      }
     }
-    return message;
   }
 }
