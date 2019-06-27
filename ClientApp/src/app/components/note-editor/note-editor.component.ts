@@ -6,6 +6,8 @@ import { ListItem } from 'src/app/models/ListItem';
 import { Note } from 'src/app/models/Note';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { ScheduleRepeater } from 'src/app/models/ScheduleRepeater';
+import { ScheduleNotification } from 'src/app/models/ScheduleNotification';
+import { Schedule } from 'src/app/models/Schedule';
 
 @Component({
   selector: 'tasky-note-editor',
@@ -17,14 +19,10 @@ export class NoteEditorComponent implements OnInit {
   newChecklist: CheckList;
   checkBoxMode = false;
   isScheduleVisible = false;
-
-  selectedDate: NgbDate;
-  internalSelectedDate: NgbDate;
-
-  selectedRepeat: ScheduleRepeater;
-  internalSelectedRepeat: ScheduleRepeater;
-
   scheduleClicked: boolean;
+  selectedSchedule: Schedule;
+  selectedScheduleDate: NgbDate;
+  selectedScheduleRepeat: ScheduleRepeater;
 
   @Output() editorClosed = new EventEmitter();
   @Output() editComplete = new EventEmitter();
@@ -206,14 +204,26 @@ export class NoteEditorComponent implements OnInit {
     this.scheduleClicked = isChanged;
   }
 
-  repeaterSelected(data: ScheduleRepeater) {
-    this.selectedRepeat = data;
-  }
-
-  saveSchedule(event: { date: NgbDate, repeat: ScheduleRepeater }) {
-    this.selectedDate = event.date;
-    this.selectedRepeat = event.repeat;
+  saveSchedule(schedule: ScheduleNotification) {
+    this.selectedSchedule = new Schedule();
+    this.selectedScheduleDate = schedule.Date;
+    this.selectedScheduleRepeat = schedule.Repeat;
+    this.selectedSchedule.startDate = new Date(schedule.Date.year, schedule.Date.month, schedule.Date.day);
+    this.selectedSchedule.repeat = schedule.Repeat;
+    this.selectedSchedule.time = schedule.Time;
     this.scheduleClicked = true;
     this.isScheduleVisible = false;
+  }
+
+  isScheduleAssigned(): boolean {
+    return this.selectedSchedule != null && this.selectedSchedule != undefined;
+  }
+
+  nextSchedule(): string {
+    let message: string;
+    if (this.selectedSchedule.repeat.name == "Daily") {
+      message = "Today";
+    }
+    return message;
   }
 }

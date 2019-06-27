@@ -24,8 +24,12 @@
       <input id="newText" type="text" placeholder="Take a note..." #checklistText
         (keypress)="typed($event, checklistText)">
     </div>
+    <div *ngIf="isScheduleAssigned()">
+      <button><i class="fas fa-sync"></i>{{ nextSchedule() }}</button>
+    </div>
     <i class="far fa-check-square fa-lg" (click)="changeEditorMode();"></i>
     <i #calendarIcon [hidden]="!editMode" class="far fa-calendar-alt fa-lg" (click)="showSchedule();"></i>
-    <tasky-schedule-menu [hidden]="!isScheduleVisible" (scheduleChanged)="scheduleChanged($event)" (saveSchedule)="saveSchedule($event)"></tasky-schedule-menu>
+    <tasky-schedule-menu [hidden]="!isScheduleVisible" (scheduleChanged)="scheduleChanged($event)"
+      (saveSchedule)="saveSchedule($event)"></tasky-schedule-menu>
   </div>
 </div>

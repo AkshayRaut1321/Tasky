@@ -13,7 +13,7 @@
       ngbDatepicker #d="ngbDatepicker" (click)="showDatePicker(d)" autocomplete="off" (dateSelect)="scheduleChange()">
     <br />
     <br />
-    <ngb-timepicker [(ngModel)]="time" [spinners]="false" [meridian]="true"></ngb-timepicker>
+    <ngb-timepicker [(ngModel)]="scheduledTime" [spinners]="false" [meridian]="true"></ngb-timepicker>
     <br />
     <ngx-multiselect [(ngModel)]="scheduledRepeat" [options]="repeaters" ngDefaultControl (onReset)="onResetFired()" (onItemClick)="scheduleChange()">
     </ngx-multiselect>

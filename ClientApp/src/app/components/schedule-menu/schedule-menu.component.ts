@@ -1,6 +1,8 @@
 import { Component, OnInit, ElementRef, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { NgbDate, NgbDatepicker, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { ScheduleRepeater } from 'src/app/models/ScheduleRepeater';
+import { ScheduleNotification } from 'src/app/models/ScheduleNotification';
+import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
 
 @Component({
   selector: 'tasky-schedule-menu',
@@ -14,8 +16,9 @@ export class ScheduleMenuComponent implements OnInit {
 
   repeaters: ScheduleRepeater[];
   scheduledRepeat: ScheduleRepeater;
-
   scheduledDate: NgbDate;
+  scheduledTime: NgbTime;
+
   @ViewChild('dropDownSchedule') dropDownSchedule: ElementRef;
   @Output() scheduleChanged = new EventEmitter();
   @Output() saveSchedule = new EventEmitter();
@@ -67,7 +70,7 @@ export class ScheduleMenuComponent implements OnInit {
   }
 
   save() {
-    this.saveSchedule.emit({ date : this.scheduledDate , repeat : this.scheduledRepeat });
+    this.saveSchedule.emit(new ScheduleNotification(this.scheduledDate, this.scheduledTime, this.scheduledRepeat));
   }
 
 }
