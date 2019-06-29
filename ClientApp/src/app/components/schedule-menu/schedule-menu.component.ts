@@ -1,10 +1,10 @@
-import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { NgbDate, NgbInputDatepicker, NgbTimeStruct, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { ScheduleRepeater } from 'src/app/models/ScheduleRepeater';
 import { ScheduleNotification } from 'src/app/models/ScheduleNotification';
 import { isNullOrUndefined } from 'util';
 import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
-import { NgbTimeStructAdapter } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time-adapter';
+import { Schedule } from 'src/app/models/Schedule';
 
 @Component({
   selector: 'tasky-schedule-menu',
@@ -24,6 +24,8 @@ export class ScheduleMenuComponent implements OnInit {
   startDate: NgbDate;
 
   @ViewChild('dropDownSchedule') dropDownSchedule: ElementRef;
+  
+  @Input() selectedSchedule: Schedule;
   @Output() scheduleChanged = new EventEmitter();
   @Output() saveSchedule = new EventEmitter();
 
@@ -37,16 +39,25 @@ export class ScheduleMenuComponent implements OnInit {
     this.repeaters.push({ id: 3, name: "Monthly" });
     this.repeaters.push({ id: 4, name: "Yearly" });
     this.repeaters.push({ id: 5, name: "Custom" });
-    
-    let currentDate = new Date();
-    this.minDate = new NgbDate(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
-    this.scheduledDate = this.minDate;
-    let tempTime = {};
-    this.scheduledTime = (tempTime as NgbTime);
-    this.scheduledTime.hour = currentDate.getHours();
-    this.scheduledTime.minute = currentDate.getMinutes();
-    this.onResetFired();
 
+    let currentDate = new Date();
+    let tempTime = {};
+    this.minDate = new NgbDate(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
+    this.scheduledTime = (tempTime as NgbTime);
+
+    if (!isNullOrUndefined(this.selectedSchedule)) {
+      this.scheduledDate = new NgbDate(this.selectedSchedule.startDate.getFullYear(), this.selectedSchedule.startDate.getMonth() + 1, this.selectedSchedule.startDate.getDate());
+      this.scheduledTime.hour = this.selectedSchedule.startDate.getHours();
+      this.scheduledTime.minute = this.selectedSchedule.startDate.getMinutes();
+      this.scheduledRepeat = this.selectedSchedule.repeat;
+      this.openDateTimePicker();
+    }
+    else {
+      this.scheduledDate = this.minDate;
+      this.scheduledTime.hour = currentDate.getHours();
+      this.scheduledTime.minute = currentDate.getMinutes();
+      this.onResetFired();
+    }
   }
 
   showSchedule() {

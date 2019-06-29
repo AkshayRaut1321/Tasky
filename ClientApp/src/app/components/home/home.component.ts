@@ -4,6 +4,8 @@ import { BaseNote } from '../../models/BaseNote';
 import { CheckList } from '../../models/CheckList';
 import { ListItem } from '../../models/ListItem';
 import { StringHelperService } from 'src/app/services/string-helper.service';
+import { isNullOrUndefined } from 'util';
+import { DateService } from 'src/app/services/date-service';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +17,7 @@ export class HomeComponent implements OnInit {
   newChecklistItemIdKey = 'newChecklistText';
   newChecklistBoxIdKey = 'newChecklistBox';
   hasTextLocal = StringHelperService.hasText;
+  isScheduleValid = false;
 
   @ViewChild('title') newTitle: ElementRef;
   @ViewChild('text') newText: ElementRef;
@@ -82,4 +85,58 @@ export class HomeComponent implements OnInit {
   trackByItems(index: number, item: ListItem): number {
     return item.id;
   };
+
+  hasChecklistItems(note: CheckList) {
+    return note.items ? note.items.length > 0 : false;
+  }
+
+  isScheduleAssigned(note: BaseNote): boolean {
+    return !isNullOrUndefined(note.schedule);
+  }
+
+  nextSchedule(note: BaseNote): string {
+    let message: string;
+    if (!isNullOrUndefined(note.schedule)) {
+      let currentDate = new Date();
+      const dateDiff = note.schedule.startDate.valueOf() - currentDate.valueOf();
+      const scheduledYear = note.schedule.startDate.getFullYear();
+      const scheduledMonth = note.schedule.startDate.getMonth();
+      const scheduledDate = note.schedule.startDate.getDate();
+      const scheduledHour = note.schedule.startDate.getHours();
+      const scheduledMinute = note.schedule.startDate.getMinutes();
+      const scheduleTime = note.schedule.startDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      if (dateDiff != 0) {
+        if (scheduledYear <= currentDate.getFullYear() && scheduledMonth <= currentDate.getMonth() && scheduledDate <= currentDate.getDate()
+          && scheduledHour <= currentDate.getHours() && scheduledMinute < currentDate.getMinutes()) {
+          message = "Today " + scheduleTime;
+          this.isScheduleValid = false;
+          return;
+        }
+        else if (scheduledYear > currentDate.getFullYear()) {
+          console.log('year');
+          message = scheduledYear.toString() + " " + DateService.monthNames[scheduledMonth] + " "
+            + scheduledDate.toString() + " " + scheduleTime
+        }
+        else if (scheduledMonth > currentDate.getMonth()) {
+          console.log('month');
+          message = DateService.monthNames[scheduledMonth] + " "
+            + scheduledDate.toString() + " " + scheduleTime;
+        }
+        else if (scheduledDate > currentDate.getDate()) {
+          console.log('day');
+          message = scheduleTime;
+          if ((scheduledDate - currentDate.getDate()) == 1)
+            message = "Tomorrow " + message;
+          else
+            message = DateService.monthNames[scheduledMonth] + " " + scheduledDate.toString() + " " + message;
+        }
+        else if (scheduledDate == currentDate.getDate()) {
+          console.log('today');
+          message = "Today " + scheduleTime;
+        }
+        this.isScheduleValid = true;
+      }
+    }
+    return message;
+  }
 }

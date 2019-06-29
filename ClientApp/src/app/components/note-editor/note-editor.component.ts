@@ -4,11 +4,8 @@ import { CheckList } from 'src/app/models/CheckList';
 import { isNullOrUndefined } from 'util';
 import { ListItem } from 'src/app/models/ListItem';
 import { Note } from 'src/app/models/Note';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import { ScheduleRepeater } from 'src/app/models/ScheduleRepeater';
 import { ScheduleNotification } from 'src/app/models/ScheduleNotification';
 import { Schedule } from 'src/app/models/Schedule';
-import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
 import { DateService } from 'src/app/services/date-service';
 import { interval, Subscription } from 'rxjs';
 
@@ -24,9 +21,6 @@ export class NoteEditorComponent implements OnInit {
   isScheduleVisible = false;
   scheduleClicked: boolean;
   selectedSchedule: Schedule;
-  selectedScheduleDate: NgbDate;
-  selectedScheduleTime: NgbTime;
-  selectedScheduleRepeat: ScheduleRepeater;
   message: string;
   isScheduleValid: boolean;
   watchScheduleValidity: Subscription;
@@ -53,7 +47,7 @@ export class NoteEditorComponent implements OnInit {
     }
   }
 
-  close(event: FocusEvent, title: HTMLInputElement) {
+  close(title: HTMLInputElement) {
     if (this.scheduleClicked) {
       this.scheduleClicked = false;
       return;
@@ -62,30 +56,43 @@ export class NoteEditorComponent implements OnInit {
     if (this.editMode) {
       let text = this.renderer.selectRootElement('#newText');
       if (text instanceof HTMLTextAreaElement) {
+
         var textArea = text as HTMLTextAreaElement;
-        if (StringHelperService.hasText(textArea.value)) {
+
+        if (StringHelperService.hasText(textArea.value) || StringHelperService.hasText(title.value) || !isNullOrUndefined(this.selectedSchedule)) {
           let newNote = new Note();
           newNote.text = textArea.value;
           newNote.title = title.value;
+          newNote.schedule = this.selectedSchedule;
           this.editComplete.emit(newNote);
         }
+
         textArea.value = "";
         textArea.rows = 1;
       }
       else if (text instanceof HTMLInputElement) {
         var inputText = text as HTMLInputElement;
+
         if (StringHelperService.hasText(inputText.value))
           this.saveChecklistItem(inputText.value);
-        if (this.hasChecklistItems()) {
+        if (this.hasChecklistItems() || StringHelperService.hasText(title.value) || !isNullOrUndefined(this.selectedSchedule)) {
           this.newChecklist.title = title.value;
+          this.newChecklist.schedule = this.selectedSchedule;
           this.editComplete.emit(this.newChecklist);
         }
+
         this.resetChecklist();
         inputText.value = "";
       }
+
       title.value = "";
       this.editMode = false;
+      this.checkBoxMode = false;
+      this.isScheduleVisible = false;
     }
+    else if (!this.editMode && this.isScheduleVisible)
+      this.isScheduleVisible = false;
+
     this.editorClosed.emit();
   }
 
@@ -104,6 +111,7 @@ export class NoteEditorComponent implements OnInit {
         text.rows++;
       else if (event.keyCode === 8) {
         let matchedLineBreak = RegExp(/\r\n|\r|\n/).exec(text.value[text.value.length - 1]);
+
         if (!isNullOrUndefined(matchedLineBreak)) {
           let totalNewLines = text.value.split(/\r\n|\r|\n/).length;
           text.rows = totalNewLines > 1 ? totalNewLines - 1 : 1;
@@ -120,7 +128,7 @@ export class NoteEditorComponent implements OnInit {
     }
   }
 
-  editExistingChecklist(event: KeyboardEvent, checklistItem: ListItem, checklistItemElement: HTMLInputElement) {
+  editExistingChecklist(event: KeyboardEvent, checklistItem: ListItem) {
     if (event.keyCode !== 13 && (event.keyCode <= 48 || event.keyCode >= 90) && (event.keyCode <= 97 && event.keyCode >= 122)) {
       console.log(event);
       return false;
@@ -215,10 +223,8 @@ export class NoteEditorComponent implements OnInit {
   }
 
   saveSchedule(schedule: ScheduleNotification) {
+    this.scheduleClicked = true;
     this.selectedSchedule = new Schedule();
-    this.selectedScheduleDate = schedule.Date;
-    this.selectedScheduleTime = schedule.Time;
-    this.selectedScheduleRepeat = schedule.Repeat;
     this.selectedSchedule.startDate = new Date(schedule.Date.year, schedule.Date.month - 1, schedule.Date.day,
       schedule.Time.hour, schedule.Time.minute);
     this.selectedSchedule.repeat = schedule.Repeat;
@@ -227,13 +233,13 @@ export class NoteEditorComponent implements OnInit {
   }
 
   isScheduleAssigned(): boolean {
-    return this.selectedSchedule != null && this.selectedSchedule != undefined;
+    return !isNullOrUndefined(this.selectedSchedule);
   }
 
   nextSchedule() {
     if (!isNullOrUndefined(this.selectedSchedule)) {
       let currentDate = new Date();
-      const dateDiff = (this.selectedSchedule.startDate as any) - (currentDate as any);
+      const dateDiff = this.selectedSchedule.startDate.valueOf() - currentDate.valueOf();
       const scheduledYear = this.selectedSchedule.startDate.getFullYear();
       const scheduledMonth = this.selectedSchedule.startDate.getMonth();
       const scheduledDate = this.selectedSchedule.startDate.getDate();
@@ -241,7 +247,14 @@ export class NoteEditorComponent implements OnInit {
       const scheduledMinute = this.selectedSchedule.startDate.getMinutes();
       const scheduleTime = this.selectedSchedule.startDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
       if (dateDiff != 0) {
-        if (scheduledYear > currentDate.getFullYear()) {
+        if (scheduledYear <= currentDate.getFullYear() && scheduledMonth <= currentDate.getMonth() && scheduledDate <= currentDate.getDate()
+          && scheduledHour <= currentDate.getHours() && scheduledMinute < currentDate.getMinutes()) {
+          this.message = "Today " + scheduleTime;
+          this.isScheduleValid = false;
+          this.watchScheduleValidity.remove(this.watchScheduleValidity);
+          return;
+        }
+        else if (scheduledYear > currentDate.getFullYear()) {
           console.log('year');
           this.message = scheduledYear.toString() + " " + DateService.monthNames[scheduledMonth] + " "
             + scheduledDate.toString() + " " + scheduleTime
@@ -258,13 +271,6 @@ export class NoteEditorComponent implements OnInit {
             this.message = "Tomorrow " + this.message;
           else
             this.message = DateService.monthNames[scheduledMonth] + " " + scheduledDate.toString() + " " + this.message;
-        }
-        else if (scheduledYear == currentDate.getFullYear() && scheduledMonth == currentDate.getMonth() && scheduledDate == currentDate.getDate()
-          && scheduledHour == currentDate.getHours() && (scheduledMinute == currentDate.getMinutes() || scheduledMinute <= currentDate.getMinutes())) {
-          this.message = "Today " + scheduleTime;
-          this.isScheduleValid = false;
-          this.watchScheduleValidity.remove(this.watchScheduleValidity);
-          return;
         }
         else if (scheduledDate == currentDate.getDate()) {
           console.log('today');

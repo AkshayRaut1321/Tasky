@@ -26,18 +26,3 @@
 .far {
     cursor: pointer;
 }
-
-.nextSchedule {
-    background-color: rgba(0, 0, 0, 0.08);
-    border-radius: 12px;
-    font-family: 'Google Sans', Roboto, Arial, sans-serif;
-    font-weight: 500;
-    max-width: max-content;
-    padding: 4px 6px;
-    user-select: none;
-    cursor: pointer;
-}
-
-.fontDisabled {
-    opacity: .54;
-}

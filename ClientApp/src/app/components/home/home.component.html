@@ -9,7 +9,7 @@
       <h5 class="card-title">{{note.title}}</h5>
       <p class="card-text" *ngIf="hasTextLocal(note.text)">{{note.text}}
       </p>
-      <span *ngIf="true">
+      <span *ngIf="hasChecklistItems(note)">
         <label *ngFor="let item of note.items" class="col-sm-12">
           <span class="checkbox">
             <input type="checkbox" [id]="newChecklistBoxIdKey + item.id" [(ngModel)]="item.checked">
@@ -17,6 +17,11 @@
           </span>
         </label>
       </span>
+      <div *ngIf="isScheduleAssigned(note)">
+        <div [ngClass]="{ nextSchedule : true }" style="font-size: small">
+          <i [ngClass]="{ fas: true, 'fa-sync' : true }"></i>
+          &nbsp;{{ nextSchedule(note) }}</div>
+      </div>
     </div>
   </div>
 </div>

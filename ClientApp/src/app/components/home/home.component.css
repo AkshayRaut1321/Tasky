@@ -70,16 +70,3 @@
         max-width: 23%;
     }
 }
-
-.cursorPointer {
-    cursor: pointer;
-}
-
-.noBorderOutline {
-    border: none;
-    outline: 0px;
-}
-
-.bottomBorder {
-    border-bottom: 1px solid;
-}
