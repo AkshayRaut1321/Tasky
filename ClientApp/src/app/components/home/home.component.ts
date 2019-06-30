@@ -86,6 +86,12 @@ export class HomeComponent implements OnInit {
     return item.id;
   };
 
+  deleteNote(note: BaseNote) {
+    if (!isNullOrUndefined(note)) {
+      this.notes.splice(this.notes.indexOf(note), 1);
+    }
+  }
+
   hasChecklistItems(note: CheckList) {
     return note.items ? note.items.length > 0 : false;
   }

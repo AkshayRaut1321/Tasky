@@ -17,6 +17,7 @@
           </span>
         </label>
       </span>
+      <i style="float: right;" class="far fa-trash-alt cursorPointer" (click)="deleteNote(note)"></i>
       <div *ngIf="isScheduleAssigned(note)">
         <div [ngClass]="{ nextSchedule : true }" style="font-size: small">
           <i [ngClass]="{ fas: true, 'fa-sync' : true }"></i>
