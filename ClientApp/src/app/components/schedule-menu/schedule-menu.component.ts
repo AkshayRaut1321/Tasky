@@ -23,7 +23,7 @@ export class ScheduleMenuComponent implements OnInit {
   minDate: NgbDate;
   startDate: NgbDate;
 
-  @ViewChild('dropDownSchedule') dropDownSchedule: ElementRef;
+  @ViewChild('dropDownSchedule', { static : true }) dropDownSchedule: ElementRef;
   
   @Input() selectedSchedule: Schedule;
   @Output() scheduleChanged = new EventEmitter();

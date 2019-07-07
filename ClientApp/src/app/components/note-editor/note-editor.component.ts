@@ -27,8 +27,8 @@ export class NoteEditorComponent implements OnInit {
 
   @Output() editorClosed = new EventEmitter();
   @Output() editComplete = new EventEmitter();
-  @ViewChild('divNewNote') divNewNote: ElementRef;
-  @ViewChild('calendarIcon') calendarIcon: ElementRef;
+  @ViewChild('divNewNote', { static : true }) divNewNote: ElementRef;
+  @ViewChild('calendarIcon', { static : true }) calendarIcon: ElementRef;
   @ViewChildren('checkBoxes') checkBoxes: QueryList<ElementRef<HTMLElement>>;
 
   constructor(private renderer: Renderer2) { }

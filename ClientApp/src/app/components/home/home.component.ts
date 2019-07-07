@@ -19,9 +19,9 @@ export class HomeComponent implements OnInit {
   hasTextLocal = StringHelperService.hasText;
   isScheduleValid = false;
 
-  @ViewChild('title') newTitle: ElementRef;
-  @ViewChild('text') newText: ElementRef;
-  @ViewChild('divNewChecklist') divNewChecklist: ElementRef;
+  @ViewChild('title', { static : true }) newTitle: ElementRef;
+  @ViewChild('text', { static : true }) newText: ElementRef;
+  @ViewChild('divNewChecklist', { static : true }) divNewChecklist: ElementRef;
 
   constructor() {
 
