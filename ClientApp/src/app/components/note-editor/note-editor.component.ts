@@ -64,6 +64,7 @@ export class NoteEditorComponent implements OnInit {
           newNote.text = textArea.value;
           newNote.title = title.value;
           newNote.schedule = this.selectedSchedule;
+          this.selectedSchedule = null;
           this.editComplete.emit(newNote);
         }
 
@@ -77,6 +78,7 @@ export class NoteEditorComponent implements OnInit {
           this.saveChecklistItem(inputText.value);
         if (this.hasChecklistItems() || StringHelperService.hasText(title.value) || !isNullOrUndefined(this.selectedSchedule)) {
           this.newChecklist.title = title.value;
+          this.selectedSchedule = null;
           this.newChecklist.schedule = this.selectedSchedule;
           this.editComplete.emit(this.newChecklist);
         }

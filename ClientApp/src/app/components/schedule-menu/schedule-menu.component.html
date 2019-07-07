@@ -18,7 +18,8 @@
     </ngb-timepicker>
     <br />
     <ngx-multiselect [(ngModel)]="scheduledRepeat" [options]="repeaters" (onReset)="onResetFired()"
-      (onItemClick)="scheduleChange()">
+      (onItemClick)="scheduleChange()" 
+      [multiple]="false">
     </ngx-multiselect>
     <div>
       <div class="col-sm-4 saveScheduleButton" (click)="save()">Save</div>
