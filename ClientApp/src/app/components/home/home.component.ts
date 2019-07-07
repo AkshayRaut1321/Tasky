@@ -82,10 +82,6 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  trackByItems(index: number, item: ListItem): number {
-    return item.id;
-  };
-
   deleteNote(note: BaseNote) {
     if (!isNullOrUndefined(note)) {
       this.notes.splice(this.notes.indexOf(note), 1);

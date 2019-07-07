@@ -4,7 +4,7 @@
 </tasky-note-editor>
 <br />
 <div class="row">
-  <div class="col-sm-3 card" style="height: max-content;" *ngFor="let note of notes| reverseArray ; trackBy: note?.id">
+  <div class="col-sm-3 card" style="height: max-content;" *ngFor="let note of notes| reverseArray">
     <div class="card-body">
       <h5 class="card-title">{{note.title}}</h5>
       <p class="card-text" *ngIf="hasTextLocal(note.text)">{{note.text}}
