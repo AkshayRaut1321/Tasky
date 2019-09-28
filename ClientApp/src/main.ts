@@ -17,4 +17,12 @@ if (environment.production) {
 }
 
 platformBrowserDynamic(providers).bootstrapModule(AppModule)
+  /* When angular serviceWorker doesn't register itself in v7 and v8 then following code can be used to regsiter it.
+  Another way to register is set the 'registrationStrategy' to registerImmediately while registering serviceWorker in AppModule */
+  // .then(() => {
+  //   debugger;
+  //   if ('serviceWorker' in navigator && environment.production) {
+  //     navigator.serviceWorker.register('/ngsw-worker.js');
+  //   }
+  // })
   .catch(err => console.log(err));

@@ -15,6 +15,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMultiselectModule } from '@ngx-lib/multiselect';
 import { ReverseArrayPipe } from './pipes/reverse-array.pipe';
 import { ScheduleMenuComponent } from './components/schedule-menu/schedule-menu.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,12 @@ import { ScheduleMenuComponent } from './components/schedule-menu/schedule-menu.
     ]),
     ClickOutsideModule,
     NgbModule,
-    NgxMultiselectModule
+    NgxMultiselectModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production
+      /* When angular serviceWorker doesn't register itself in v7 and v8 then following code can be used to regsiter it.
+      Another way to register is set the 'registrationStrategy' to registerImmediately while registering serviceWorker in AppModule */
+      , registrationStrategy: 'registerImmediately'
+     })
   ],
   providers: [],
   bootstrap: [AppComponent]
