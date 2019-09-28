@@ -15,8 +15,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxMultiselectModule } from '@ngx-lib/multiselect';
 import { ReverseArrayPipe } from './pipes/reverse-array.pipe';
 import { ScheduleMenuComponent } from './components/schedule-menu/schedule-menu.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -40,8 +38,7 @@ import { environment } from '../environments/environment';
     ]),
     ClickOutsideModule,
     NgbModule,
-    NgxMultiselectModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    NgxMultiselectModule
   ],
   providers: [],
   bootstrap: [AppComponent]
