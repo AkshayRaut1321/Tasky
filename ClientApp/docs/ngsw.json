@@ -1,0 +1,76 @@
+{
+  "configVersion": 1,
+  "timestamp": 1577284978117,
+  "index": "/Tasky/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "urls": [
+        "/Tasky/index.html",
+        "/Tasky/main-es2015.f8fd715412c9124ed8a4.js",
+        "/Tasky/main-es5.9cb377b20ae0f79ab40c.js",
+        "/Tasky/polyfills-es2015.f447557b9a57d410abdc.js",
+        "/Tasky/polyfills-es5.4d5d14f0370671ddee45.js",
+        "/Tasky/runtime-es2015.703a23e48ad83c851e49.js",
+        "/Tasky/runtime-es5.465c2333d355155ec5f3.js",
+        "/Tasky/styles.cd372833882a04a12260.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "urls": [
+        "/Tasky/assets/icons/icon-128x128.png",
+        "/Tasky/assets/icons/icon-144x144.png",
+        "/Tasky/assets/icons/icon-152x152.png",
+        "/Tasky/assets/icons/icon-192x192.png",
+        "/Tasky/assets/icons/icon-384x384.png",
+        "/Tasky/assets/icons/icon-512x512.png",
+        "/Tasky/assets/icons/icon-72x72.png",
+        "/Tasky/assets/icons/icon-96x96.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/Tasky/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
+    "/Tasky/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
+    "/Tasky/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
+    "/Tasky/assets/icons/icon-192x192.png": "1abd80d431a237a853ce38147d8c63752f10933b",
+    "/Tasky/assets/icons/icon-384x384.png": "329749cd6393768d3131ed6304c136b1ca05f2fd",
+    "/Tasky/assets/icons/icon-512x512.png": "559d9c4318b45a1f2b10596bbb4c960fe521dbcc",
+    "/Tasky/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
+    "/Tasky/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
+    "/Tasky/index.html": "40e556cab7fd9f93049f664d209d04c344a5068b",
+    "/Tasky/main-es2015.f8fd715412c9124ed8a4.js": "eacfb294015e268b743f70d07f07f2606abcb883",
+    "/Tasky/main-es5.9cb377b20ae0f79ab40c.js": "8fd2cf3a1f05ed636643e66e15ec81b7f89edb2f",
+    "/Tasky/polyfills-es2015.f447557b9a57d410abdc.js": "40bbd1b08321aa92538743bb9a0c7fc8974bee5e",
+    "/Tasky/polyfills-es5.4d5d14f0370671ddee45.js": "67cd08625c69207c9254005c1aafd963a7c0d171",
+    "/Tasky/runtime-es2015.703a23e48ad83c851e49.js": "b62956c2192bfe5516d6374e753773901ed50ec5",
+    "/Tasky/runtime-es5.465c2333d355155ec5f3.js": "b62956c2192bfe5516d6374e753773901ed50ec5",
+    "/Tasky/styles.cd372833882a04a12260.css": "19ff90622f94a5e32fa6166d46473fb16a787f42"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ]
+}
